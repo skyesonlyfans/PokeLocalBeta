@@ -21,6 +21,7 @@
             --valor: #ef4444;
             --mystic: #3b82f6;
             --instinct: #eab308;
+            --raid-glow: rgba(168, 85, 247, 0.6);
         }
         body { 
             font-family: 'Inter', sans-serif; 
@@ -40,7 +41,7 @@
         .input-field { 
             background-color: #0b0c10; border: 2px solid var(--border); color: var(--text); 
             border-radius: 16px; padding: 16px; width: 100%; outline: none; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 600; font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 600; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;
         }
         .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); transform: translateY(-2px); }
         .btn-primary { 
@@ -56,6 +57,10 @@
         .btn-secondary { background-color: rgba(255,255,255,0.05); color: var(--text); border: 2px solid var(--border); border-radius: 16px; font-weight: 700; padding: 14px; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(4px); }
         .btn-secondary:hover { background-color: var(--surface-hover); border-color: #4b5563; }
         .btn-secondary:active { transform: scale(0.96); }
+        .btn-google { background-color: white; color: #333; border: 1px solid #ccc; font-weight: 700; }
+        .btn-google:hover { background-color: #f1f5f9; box-shadow: 0 4px 15px rgba(255,255,255,0.2); transform: translateY(-2px); }
+        .btn-raid { background: linear-gradient(135deg, #9333ea, #a855f7); box-shadow: 0 6px 20px var(--raid-glow); }
+        .btn-raid:hover { box-shadow: 0 8px 25px rgba(168, 85, 247, 0.8); }
 
         header { 
             background-color: rgba(11, 12, 16, 0.85); backdrop-filter: blur(16px); 
@@ -89,10 +94,11 @@
         
         .xp-bar-container { background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 8px; height: 10px; overflow: hidden; width: 100%; position: relative; margin-top: 4px; }
         .xp-bar-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); transition: width 0.5s ease-out; box-shadow: 0 0 10px rgba(59,130,246,0.5); }
-        
         .hp-bar-container { width: 100%; height: 6px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden; margin-top: 4px; border: 1px solid rgba(0,0,0,0.3); }
         .hp-bar-fill { height: 100%; transition: width 0.3s, background-color 0.3s; }
         .card-fainted { filter: grayscale(100%) opacity(0.6); }
+        .raid-boss-pulse { animation: boss-pulse 2s infinite ease-in-out; }
+        @keyframes boss-pulse { 0%, 100% { filter: drop-shadow(0 0 15px rgba(168,85,247,0.4)); transform: scale(1); } 50% { filter: drop-shadow(0 0 35px rgba(168,85,247,0.8)); transform: scale(1.02); } }
         
         .screen { display: none; animation: screenFadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); max-width: 1200px; margin: 0 auto; width: 100%; }
         .screen.active { display: block; }
@@ -139,7 +145,6 @@
             50% { transform: translateY(-15px) scale(1.1); filter: drop-shadow(0 25px 25px rgba(255,255,255,0.6)); }
         }
         .gamified-gif { animation: float-gif 4s ease-in-out infinite; }
-        
         .card-header { padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, #ffffff, #f3f4f6); border-bottom: 2px solid rgba(0,0,0,0.05); }
         .card-name { font-weight: 900; font-size: 15px; text-transform: uppercase; color: #111827; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .card-hp { font-size: 14px; font-weight: 900; color: #dc2626; text-shadow: 1px 1px 0px rgba(255,255,255,0.8); }
@@ -153,7 +158,6 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .card-img { width: 100%; height: 100%; object-fit: contain; z-index: 2; filter: drop-shadow(0 12px 16px rgba(0,0,0,0.4)); transition: transform 0.3s; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
         .flip-card:hover .card-img { transform: scale(1.05); }
-        
         .rarity-legendary { border-color: #fbbf24 !important; }
         .rarity-rare { border-color: #a855f7 !important; }
         .rarity-uncommon { border-color: #22c55e !important; }
@@ -223,9 +227,9 @@
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
         
-        .trade-slot { aspect-ratio: 63/88; border: 3px dashed var(--border); border-radius: 16px; display: flex; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.3); position: relative; overflow: hidden; transition: all 0.3s; width: 100%; max-width: 90px; }
-        .trade-slot:hover { border-color: #4b5563; background-color: rgba(0,0,0,0.5); }
-        .trade-slot img { width: 100%; height: 100%; object-fit: contain; padding: 4px; position: absolute; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
+        .trade-slot, .battle-slot { aspect-ratio: 63/88; border: 3px dashed var(--border); border-radius: 16px; display: flex; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.3); position: relative; overflow: hidden; transition: all 0.3s; width: 100%; max-width: 90px; cursor: pointer; }
+        .trade-slot:hover, .battle-slot:hover { border-color: #4b5563; background-color: rgba(0,0,0,0.5); }
+        .trade-slot img, .battle-slot img { width: 100%; height: 100%; object-fit: contain; padding: 4px; position: absolute; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -255,7 +259,7 @@
             @media (min-width: 1280px) { #collection-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
             .radar-layout { display: flex; gap: 40px; align-items: stretch; }
             .radar-container { flex: 1; height: 500px; }
-            .radar-side { width: 380px; display: flex; flex-direction: column; justify-content: space-between; }
+            .radar-side { width: 380px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
             .trade-modal-content { flex-direction: row; }
             .trade-modal-slots { flex-direction: row; gap: 40px; justify-content: center; padding: 40px; }
             .trade-modal-chat { border-left: 1px solid var(--border); border-top: none; width: 350px; }
@@ -332,16 +336,7 @@
                         <h2 class="text-3xl font-black text-white uppercase tracking-wider">Save Data</h2>
                         <p class="text-sm text-gray-400 mt-3 font-medium px-4">Sign in with Google to protect your cards and sync across devices.</p>
                     </div>
-                    <button id="btn-google-login" class="w-full mb-4 bg-white hover:bg-gray-100 text-gray-800 font-bold py-4 px-4 border border-gray-300 rounded-2xl shadow-[0_4px_15px_rgba(255,255,255,0.1)] flex items-center justify-center gap-3 transition-all duration-300 hover:-translate-y-1">
-                        <svg class="w-6 h-6" viewBox="0 0 48 48">
-                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                            <path fill="none" d="M0 0h48v48H0z"/>
-                        </svg>
-                        Continue with Google
-                    </button>
+                    <button id="btn-google-login" class="btn-primary btn-google w-full mb-4 py-4 text-lg"><i class="fa-brands fa-google text-[#ea4335]"></i> Continue with Google</button>
                     <button id="btn-skip-login" class="w-full py-4 text-sm text-gray-500 font-bold uppercase tracking-widest hover:text-white transition">Play Locally (No Cloud Save)</button>
                 </div>
 
@@ -384,7 +379,6 @@
 
         <div id="screen-packs" class="screen">
             <div class="text-center mb-10 mt-4 md:mt-8 relative">
-                <!-- Mobile Refresh Button -->
                 <button id="btn-mobile-refresh" class="md:hidden absolute -top-2 right-0 bg-[#151821] text-gray-400 hover:text-white w-10 h-10 rounded-full border border-[#262b3a] transition-all flex items-center justify-center shadow-lg hover:border-blue-500 z-10">
                     <i class="fa-solid fa-rotate-right"></i>
                 </button>
@@ -550,9 +544,30 @@
                     <button id="btn-refresh-network" class="absolute top-6 right-6 bg-[#0b0c10] text-gray-400 hover:text-white w-12 h-12 rounded-full border-2 border-[#262b3a] transition-all flex items-center justify-center shadow-lg hover:border-blue-500 z-40"><i class="fa-solid fa-radar fa-spin-pulse"></i></button>
                 </div>
                 <div class="radar-side order-1 md:order-2 flex flex-col gap-6 w-full md:w-[420px]">
-                    <div class="bg-[#151821] p-6 rounded-3xl border-2 border-[#262b3a] shadow-xl flex-1 flex flex-col">
+                    <!-- Raid Hub -->
+                    <div class="bg-gradient-to-b from-[#1f113a] to-[#151821] p-6 rounded-3xl border-2 border-purple-800 shadow-[0_10px_30px_rgba(147,51,234,0.2)] flex flex-col">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-8 h-8 rounded-full bg-purple-500 bg-opacity-20 flex items-center justify-center border border-purple-500 text-purple-400">
+                                <i class="fa-solid fa-meteor"></i>
+                            </div>
+                            <h3 class="font-black text-white text-sm tracking-widest uppercase text-purple-300">Raid Hub (2-8 Players)</h3>
+                        </div>
+                        <p class="text-xs text-purple-200 mb-4 font-bold opacity-80">Team up to defeat high HP Bosses. Better rewards for higher damage!</p>
+                        
+                        <div class="flex flex-col gap-3">
+                            <button id="btn-host-raid" class="btn-primary btn-raid py-3 text-sm"><i class="fa-solid fa-tower-broadcast mr-2"></i> Host Raid</button>
+                            
+                            <div class="flex gap-2">
+                                <input type="text" id="join-raid-code" placeholder="6-Digit Code" class="input-field flex-1 py-3 text-center tracking-[0.3em] font-black text-purple-300 border-purple-800 bg-[#0b0c10]" maxlength="6">
+                                <button id="btn-join-raid" class="btn-secondary border-purple-700 hover:border-purple-500 text-purple-400 px-6 font-black uppercase text-xs tracking-widest">Join</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trainers List -->
+                    <div class="bg-[#151821] p-6 rounded-3xl border-2 border-[#262b3a] shadow-xl flex-1 flex flex-col min-h-[300px]">
                         <div class="flex items-center gap-3 mb-5">
-                            <div class="w-8 h-8 rounded-full bg-red-500 bg-opacity-20 flex items-center justify-center border border-red-500 text-red-500">
+                            <div class="w-8 h-8 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center border border-blue-500 text-blue-500">
                                 <i class="fa-solid fa-satellite-dish"></i>
                             </div>
                             <h3 class="font-black text-white text-sm tracking-widest uppercase">Nearby Trainers</h3>
@@ -715,75 +730,6 @@
         </div>
     </div>
 
-    <div id="modal-battle-arena" class="modal-overlay z-[250]">
-        <div class="card-surface w-full max-w-4xl h-[95vh] md:h-[85vh] flex flex-col overflow-hidden bg-[#0b0c10] border-4 border-blue-500 relative">
-            <div class="p-4 border-b-2 border-[#262b3a] flex justify-between items-center bg-[#151821]">
-                <div class="flex items-center gap-4">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/vs-seeker.png" class="w-8 h-8">
-                    <h3 class="font-black text-white text-lg tracking-widest uppercase" id="arena-header-text">Battle Arena</h3>
-                </div>
-                <button class="btn-flee text-xs bg-red-900 bg-opacity-30 text-red-400 px-4 py-2 rounded-xl border border-red-500 border-opacity-50 font-black uppercase tracking-widest hover:bg-red-800 transition shadow-inner">Flee</button>
-            </div>
-            
-            <div class="flex-1 flex flex-col relative overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#1a1c23] via-[#0b0c10] to-black">
-                <div class="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-                
-                <!-- Opponent Side -->
-                <div class="flex-1 flex items-center justify-between p-6 relative z-10">
-                    <div class="flex flex-col gap-2">
-                        <span class="text-[10px] font-black text-gray-400 tracking-widest uppercase" id="arena-opp-name">Opponent</span>
-                        <div class="flex gap-1" id="arena-opp-party"></div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="w-32 h-32 relative">
-                            <img id="arena-opp-img" src="" class="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform duration-300">
-                            <div class="absolute -bottom-4 -left-8 right-0 bg-[#151821] border-2 border-[#262b3a] rounded-xl p-2 shadow-xl">
-                                <span class="text-[10px] font-black text-white uppercase tracking-wider truncate block" id="arena-opp-poke-name">Pokemon</span>
-                                <div class="hp-bar-container"><div id="arena-opp-hp-bar" class="hp-bar-fill bg-green-500" style="width: 100%;"></div></div>
-                                <div class="text-[8px] font-black text-right text-gray-400 mt-1"><span id="arena-opp-hp-val">0</span> HP</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Center VS & Log -->
-                <div class="h-24 bg-[#151821] border-y-2 border-[#262b3a] flex items-center px-4 relative z-20 shadow-2xl overflow-hidden">
-                    <div id="arena-log-container" class="w-full text-center">
-                        <p class="text-sm md:text-base font-black text-white tracking-widest uppercase animate-pulse" id="arena-main-log">Waiting for opponent...</p>
-                    </div>
-                </div>
-
-                <!-- Player Side -->
-                <div class="flex-1 flex items-center justify-between p-6 relative z-10">
-                    <div class="flex flex-col items-center">
-                        <div class="w-32 h-32 relative">
-                            <img id="arena-my-img" src="" class="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform duration-300">
-                            <div class="absolute -bottom-4 -right-8 left-0 bg-[#151821] border-2 border-blue-500 rounded-xl p-2 shadow-xl">
-                                <span class="text-[10px] font-black text-white uppercase tracking-wider truncate block" id="arena-my-poke-name">Pokemon</span>
-                                <div class="hp-bar-container"><div id="arena-my-hp-bar" class="hp-bar-fill bg-green-500" style="width: 100%;"></div></div>
-                                <div class="text-[8px] font-black text-right text-gray-400 mt-1"><span id="arena-my-hp-val">0</span> HP</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 items-end">
-                        <span class="text-[10px] font-black text-blue-400 tracking-widest uppercase">Your Party</span>
-                        <div class="flex gap-1" id="arena-my-party"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-4 bg-[#151821] border-t-2 border-[#262b3a] flex gap-4" id="arena-controls">
-                <button id="btn-arena-attack" class="btn-primary flex-1 py-5 text-xl tracking-widest uppercase shadow-[0_0_20px_rgba(37,99,235,0.4)] disabled:opacity-50" disabled>Attack</button>
-            </div>
-            
-            <div id="arena-result-overlay" class="absolute inset-0 bg-black bg-opacity-95 backdrop-blur-md flex-col justify-center items-center z-50 hidden">
-                <h2 id="arena-result-title" class="text-5xl font-black uppercase tracking-widest mb-4">Victory</h2>
-                <div id="arena-reward" class="text-2xl font-black text-yellow-400 mb-8 hidden"><i class="fa-solid fa-coins mr-2"></i>+<span>0</span></div>
-                <button class="btn-primary close-arena w-3/4 max-w-sm py-4 text-lg">Leave Arena</button>
-            </div>
-        </div>
-    </div>
-
     <div id="modal-trade" class="modal-overlay">
         <div class="card-surface w-full max-w-5xl h-[95vh] md:h-[85vh] flex flex-col overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border-2">
             <div class="p-4 border-b-2 border-[#262b3a] flex justify-between items-center bg-[#0b0c10]">
@@ -830,17 +776,213 @@
         </div>
     </div>
 
+    <div id="modal-battle-setup" class="modal-overlay">
+        <div class="card-surface w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border-4 border-red-500">
+            <div class="p-4 border-b-2 border-[#262b3a] flex justify-between items-center bg-[#0b0c10]">
+                <div class="flex items-center gap-4">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/vs-seeker.png" class="w-8 h-8">
+                    <div class="font-black text-white text-lg tracking-widest uppercase">Battle Prep <span class="text-gray-600 text-sm mx-2">|</span> <span id="battle-setup-partner" class="text-red-400">Trainer</span></div>
+                </div>
+                <button class="close-battle-setup text-gray-400 hover:text-red-400 bg-[#151821] w-10 h-10 rounded-full flex items-center justify-center border border-[#262b3a] transition-all text-lg shadow-inner hover:border-red-500"><i class="fa-solid fa-times"></i></button>
+            </div>
+            
+            <div class="flex-1 flex flex-col md:flex-row p-6 gap-8 items-center justify-center overflow-y-auto bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#1a1c23] to-[#0b0c10]">
+                <div class="w-full flex flex-col items-center">
+                    <span class="text-[10px] font-black text-blue-400 mb-4 tracking-widest uppercase bg-blue-900 bg-opacity-20 px-4 py-1.5 rounded-full border border-blue-500 border-opacity-30 shadow-md">Your Team (1-3)</span>
+                    <div id="my-battle-slots" class="flex gap-3 justify-center w-full"></div>
+                    <span id="my-battle-status" class="text-[11px] font-black mt-5 px-4 py-2.5 rounded-xl bg-[#151821] text-gray-400 border-2 border-[#262b3a] w-full max-w-[200px] text-center tracking-widest uppercase shadow-inner">Selecting...</span>
+                </div>
+                
+                <div class="text-4xl font-pokemon text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] my-4 md:my-0">VS</div>
+                
+                <div class="w-full flex flex-col items-center">
+                    <span class="text-[10px] font-black text-red-400 mb-4 tracking-widest uppercase bg-red-900 bg-opacity-20 px-4 py-1.5 rounded-full border border-red-500 border-opacity-30 shadow-md">Opponent's Team</span>
+                    <div id="their-battle-slots" class="flex gap-3 justify-center w-full"></div>
+                    <span id="their-battle-status" class="text-[11px] font-black mt-5 px-4 py-2.5 rounded-xl bg-[#151821] text-gray-400 border-2 border-[#262b3a] w-full max-w-[200px] text-center tracking-widest uppercase shadow-inner">Selecting...</span>
+                </div>
+            </div>
+            
+            <div class="p-6 border-t-2 border-[#262b3a] bg-[#0b0c10] flex gap-5">
+                <button id="btn-battle-lock" class="btn-secondary flex-1 py-4 text-white border-gray-600 bg-[#151821] tracking-widest uppercase text-sm"><i class="fa-solid fa-lock mr-2"></i>Lock Team</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-battle-arena" class="modal-overlay z-[250]">
+        <div class="card-surface w-full max-w-4xl h-[95vh] md:h-[85vh] flex flex-col overflow-hidden bg-[#0b0c10] border-4 border-blue-500 relative">
+            <div class="p-4 border-b-2 border-[#262b3a] flex justify-between items-center bg-[#151821]">
+                <div class="flex items-center gap-4">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/vs-seeker.png" class="w-8 h-8">
+                    <h3 class="font-black text-white text-lg tracking-widest uppercase" id="arena-header-text">Battle Arena</h3>
+                </div>
+                <button class="btn-flee text-xs bg-red-900 bg-opacity-30 text-red-400 px-4 py-2 rounded-xl border border-red-500 border-opacity-50 font-black uppercase tracking-widest hover:bg-red-800 transition shadow-inner">Flee</button>
+            </div>
+            
+            <div class="flex-1 flex flex-col relative overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#1a1c23] via-[#0b0c10] to-black">
+                <div class="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+                
+                <div class="flex-1 flex items-center justify-between p-6 relative z-10">
+                    <div class="flex flex-col gap-2">
+                        <span class="text-[10px] font-black text-gray-400 tracking-widest uppercase" id="arena-opp-name">Opponent</span>
+                        <div class="flex gap-1" id="arena-opp-party"></div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-32 h-32 relative">
+                            <img id="arena-opp-img" src="" class="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform duration-300">
+                            <div class="absolute -bottom-4 -left-8 right-0 bg-[#151821] border-2 border-[#262b3a] rounded-xl p-2 shadow-xl">
+                                <span class="text-[10px] font-black text-white uppercase tracking-wider truncate block" id="arena-opp-poke-name">Pokemon</span>
+                                <div class="hp-bar-container"><div id="arena-opp-hp-bar" class="hp-bar-fill bg-green-500" style="width: 100%;"></div></div>
+                                <div class="text-[8px] font-black text-right text-gray-400 mt-1"><span id="arena-opp-hp-val">0</span> HP</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-24 bg-[#151821] border-y-2 border-[#262b3a] flex items-center px-4 relative z-20 shadow-2xl overflow-hidden">
+                    <div id="arena-log-container" class="w-full text-center">
+                        <p class="text-sm md:text-base font-black text-white tracking-widest uppercase animate-pulse" id="arena-main-log">Waiting for opponent...</p>
+                    </div>
+                </div>
+
+                <div class="flex-1 flex items-center justify-between p-6 relative z-10">
+                    <div class="flex flex-col items-center">
+                        <div class="w-32 h-32 relative">
+                            <img id="arena-my-img" src="" class="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform duration-300">
+                            <div class="absolute -bottom-4 -right-8 left-0 bg-[#151821] border-2 border-blue-500 rounded-xl p-2 shadow-xl">
+                                <span class="text-[10px] font-black text-white uppercase tracking-wider truncate block" id="arena-my-poke-name">Pokemon</span>
+                                <div class="hp-bar-container"><div id="arena-my-hp-bar" class="hp-bar-fill bg-green-500" style="width: 100%;"></div></div>
+                                <div class="text-[8px] font-black text-right text-gray-400 mt-1"><span id="arena-my-hp-val">0</span> HP</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2 items-end">
+                        <span class="text-[10px] font-black text-blue-400 tracking-widest uppercase">Your Party</span>
+                        <div class="flex gap-1" id="arena-my-party"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-[#151821] border-t-2 border-[#262b3a] flex gap-4" id="arena-controls">
+                <button id="btn-arena-attack" class="btn-primary flex-1 py-5 text-xl tracking-widest uppercase shadow-[0_0_20px_rgba(37,99,235,0.4)] disabled:opacity-50" disabled>Attack</button>
+            </div>
+            
+            <div id="arena-result-overlay" class="absolute inset-0 bg-black bg-opacity-95 backdrop-blur-md flex-col justify-center items-center z-50 hidden">
+                <h2 id="arena-result-title" class="text-5xl font-black uppercase tracking-widest mb-4">Victory</h2>
+                <div id="arena-reward" class="text-2xl font-black text-yellow-400 mb-8 hidden"><i class="fa-solid fa-coins mr-2"></i>+<span>0</span></div>
+                <button class="btn-primary close-arena w-3/4 max-w-sm py-4 text-lg">Leave Arena</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-raid-lobby" class="modal-overlay z-[200]">
+        <div class="card-surface w-full max-w-3xl flex flex-col overflow-hidden shadow-[0_0_60px_rgba(168,85,247,0.5)] border-4 border-purple-600 bg-[#0b0c10]">
+            <div class="p-4 border-b-2 border-purple-900 flex justify-between items-center bg-[#151821]">
+                <div class="flex items-center gap-4">
+                    <i class="fa-solid fa-meteor text-purple-400 text-2xl"></i>
+                    <div>
+                        <div class="font-black text-white text-lg tracking-widest uppercase">Raid Lobby</div>
+                        <div class="text-[10px] text-purple-300 font-bold uppercase tracking-widest">Code: <span id="raid-lobby-code" class="text-white text-sm ml-1 select-all bg-purple-900 px-2 rounded border border-purple-600">------</span></div>
+                    </div>
+                </div>
+                <button class="close-raid-lobby text-gray-400 hover:text-red-400 bg-[#151821] w-10 h-10 rounded-full flex items-center justify-center border border-[#262b3a] transition-all text-lg shadow-inner hover:border-red-500"><i class="fa-solid fa-times"></i></button>
+            </div>
+
+            <div class="p-6 bg-gradient-to-b from-[#1a1128] to-[#0b0c10] flex flex-col md:flex-row gap-6">
+                <div class="flex-1 flex flex-col">
+                    <h4 class="text-xs font-black text-purple-400 uppercase tracking-widest mb-4 border-b border-purple-900 pb-2">Trainers (<span id="raid-player-count">1</span>/8)</h4>
+                    <div id="raid-players-list" class="space-y-3 overflow-y-auto max-h-[250px] pr-2 custom-scrollbar"></div>
+                </div>
+                
+                <div class="w-full md:w-[300px] flex flex-col items-center bg-[#151821] p-6 rounded-2xl border-2 border-purple-900 shadow-inner">
+                    <span class="text-[10px] font-black text-purple-400 mb-4 tracking-widest uppercase">Your Raid Team (Max 2)</span>
+                    <div id="my-raid-slots" class="flex gap-4 justify-center w-full mb-6"></div>
+                    <button id="btn-raid-ready" class="btn-secondary w-full py-4 text-white border-purple-700 bg-[#0b0c10] tracking-widest uppercase text-sm font-black shadow-lg hover:border-purple-400"><i class="fa-solid fa-check mr-2"></i> Ready Up</button>
+                    <button id="btn-start-raid" class="btn-primary w-full py-4 mt-4 hidden bg-gradient-to-r from-purple-600 to-purple-500 shadow-[0_10px_20px_rgba(168,85,247,0.4)] tracking-widest uppercase text-sm"><i class="fa-solid fa-play mr-2"></i> Launch Raid</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-raid-arena" class="modal-overlay z-[250]">
+        <div class="card-surface w-full max-w-5xl h-[95vh] md:h-[85vh] flex flex-col overflow-hidden bg-[#0b0c10] border-4 border-purple-600 relative">
+            <div class="p-4 border-b-2 border-purple-900 flex justify-between items-center bg-[#151821]">
+                <div class="flex items-center gap-4">
+                    <i class="fa-solid fa-meteor text-purple-400 text-xl"></i>
+                    <h3 class="font-black text-white text-lg tracking-widest uppercase">Raid Battle</h3>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-black text-purple-300 uppercase tracking-widest"><i class="fa-solid fa-users mr-1"></i> <span id="raid-arena-count">0</span></span>
+                    <button class="close-raid-arena text-xs bg-red-900 bg-opacity-30 text-red-400 px-4 py-2 rounded-xl border border-red-500 border-opacity-50 font-black uppercase tracking-widest hover:bg-red-800 transition shadow-inner">Flee</button>
+                </div>
+            </div>
+            
+            <div class="flex-1 flex flex-col relative overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2a134a] via-[#0b0c10] to-black p-6">
+                <!-- Boss Section -->
+                <div class="flex flex-col items-center justify-center flex-1 relative z-10">
+                    <div class="absolute inset-0 flex justify-center items-center opacity-10 pointer-events-none">
+                        <i class="fa-solid fa-burst text-[300px] text-purple-500 animate-spin-slow"></i>
+                    </div>
+                    <div class="w-48 h-48 md:w-64 md:h-64 relative mb-4">
+                        <img id="raid-boss-img" src="" class="w-full h-full object-contain filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.8)] raid-boss-pulse transition-transform duration-100">
+                    </div>
+                    <div class="w-full max-w-md bg-[#151821] border-2 border-purple-600 rounded-2xl p-4 shadow-2xl relative z-20">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm md:text-base font-black text-white uppercase tracking-wider" id="raid-boss-name">Boss</span>
+                            <span class="text-[10px] font-black text-purple-400 uppercase tracking-widest bg-purple-900 bg-opacity-40 px-2 py-1 rounded">RAID BOSS</span>
+                        </div>
+                        <div class="hp-bar-container h-4 md:h-6 border border-gray-700 bg-black rounded-full overflow-hidden">
+                            <div id="raid-boss-hp-bar" class="h-full bg-gradient-to-r from-purple-600 to-pink-500 transition-all duration-300" style="width: 100%;"></div>
+                        </div>
+                        <div class="text-xs font-black text-center text-gray-300 mt-2 tracking-widest"><span id="raid-boss-hp-val">0</span> / <span id="raid-boss-hp-max">0</span> HP</div>
+                    </div>
+                </div>
+
+                <!-- Raid Log -->
+                <div class="h-32 bg-[#151821] border-2 border-purple-900 rounded-2xl flex flex-col p-3 relative z-20 shadow-2xl overflow-y-auto custom-scrollbar mt-4" id="raid-log-container"></div>
+            </div>
+
+            <!-- Player Section -->
+            <div class="p-4 bg-[#151821] border-t-2 border-purple-900 flex flex-col md:flex-row gap-6 items-center justify-between z-30 relative">
+                <div class="flex gap-4" id="raid-my-active-team">
+                    <!-- JS injects up to 2 active pokemon UI here -->
+                </div>
+                
+                <div class="flex-1 w-full max-w-md flex flex-col gap-2">
+                    <button id="btn-raid-attack" class="btn-primary w-full py-4 md:py-6 text-xl tracking-widest uppercase bg-gradient-to-r from-purple-600 to-pink-600 shadow-[0_0_20px_rgba(168,85,247,0.5)] border border-purple-400 disabled:opacity-50" disabled>
+                        <i class="fa-solid fa-bolt mr-2"></i> Strike Boss!
+                    </button>
+                    <div class="text-[10px] font-black text-center text-gray-400 uppercase tracking-widest">Your Damage: <span id="raid-my-damage" class="text-purple-400 text-xs">0</span></div>
+                </div>
+            </div>
+            
+            <!-- Raid Result Overlay -->
+            <div id="raid-result-overlay" class="absolute inset-0 bg-black bg-opacity-95 backdrop-blur-md flex-col justify-center items-center z-50 hidden">
+                <h2 id="raid-result-title" class="text-5xl font-black uppercase tracking-widest mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 drop-shadow-[0_0_20px_rgba(168,85,247,0.6)]">Raid Cleared!</h2>
+                <p id="raid-result-desc" class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-8">Boss Defeated</p>
+                
+                <div class="bg-[#151821] border-2 border-purple-900 rounded-2xl p-6 mb-8 w-full max-w-sm flex flex-col items-center gap-4">
+                    <span class="text-[10px] font-black text-purple-400 uppercase tracking-widest mb-2">Rewards</span>
+                    <div id="raid-reward-coins" class="text-2xl font-black text-yellow-400 flex items-center"><i class="fa-solid fa-coins mr-3 w-6"></i>+<span>0</span></div>
+                    <div id="raid-reward-revives" class="text-xl font-black text-green-400 flex items-center hidden"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/revive.png" class="w-6 h-6 mr-3">+<span>0</span></div>
+                    <div id="raid-reward-rips" class="text-xl font-black text-blue-400 flex items-center hidden"><i class="fa-solid fa-box-open w-6 mr-3 text-center"></i>+<span>0</span></div>
+                </div>
+                
+                <button class="btn-primary close-raid-result w-3/4 max-w-sm py-4 text-lg">Leave Area</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-select-card" class="modal-overlay" style="z-index: 150;">
         <div class="card-surface w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden bg-[#151821] border-2">
             <div class="p-6 border-b-2 border-[#262b3a] flex justify-between items-center bg-[#0b0c10]">
                 <div class="flex items-center gap-4">
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pokedex.png" class="w-8 h-8">
-                    <h3 class="font-black text-white text-xl tracking-widest uppercase">Select Offer</h3>
+                    <h3 class="font-black text-white text-xl tracking-widest uppercase">Select Pokemon</h3>
                 </div>
                 <button class="close-select text-gray-400 hover:text-white bg-[#151821] w-10 h-10 rounded-full border border-[#262b3a] shadow-inner transition-colors"><i class="fa-solid fa-times"></i></button>
             </div>
             <div class="flex-1 overflow-y-auto p-6 md:p-8 no-scrollbar bg-[#0b0c10]">
-                <div id="trade-collection-grid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-5"></div>
+                <div id="select-collection-grid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-5"></div>
             </div>
         </div>
     </div>
@@ -884,8 +1026,13 @@
             isAdmin: false,
             hasPendingSell: false,
             pendingBuddy: null,
-            currentPulls: [], pullIndex: 0, activeTrade: null, activePackType: null, activeDetailCard: null,
-            activeBattle: null,
+            currentPulls: [], pullIndex: 0, 
+            activeTrade: null, 
+            activeBattleSetup: null, activeBattle: null,
+            activeRaid: null, raidAttackCooldown: false,
+            cardSelectContext: 'trade', // 'trade', 'battle', 'raid'
+            activeSlotIndex: 0,
+            activePackType: null, activeDetailCard: null,
             pogoRarities: {}
         };
         
@@ -902,7 +1049,7 @@
         };
         
         let db, auth;
-        let firebaseListeners = { presence: null, incomingTrade: null, activeTrade: null, battles: null, adminRequests: null, sellRequest: null };
+        let firebaseListeners = { presence: null, incomingTrade: null, activeTrade: null, battles: null, adminRequests: null, sellRequest: null, activeRaid: null };
         let selectedTeam = '';
         let serverTimeOffset = 0;
 
@@ -932,17 +1079,12 @@
                 db = getFirestore(app);
                 auth = getAuth(app);
                 
-                // Track auth state to enable admin features
-                onAuthStateChanged(auth, (user) => {
-                    checkAdmin();
-                });
+                onAuthStateChanged(auth, (user) => { checkAdmin(); });
 
                 await new Promise((resolve) => {
                     const unsubscribe = onAuthStateChanged(auth, async (user) => {
                         unsubscribe();
-                        if (user) {
-                            resolve();
-                        } else {
+                        if (user) { resolve(); } else {
                             if (typeof __initial_auth_token !== 'undefined') {
                                 await signInWithCustomToken(auth, __initial_auth_token);
                             } else {
@@ -966,8 +1108,50 @@
                 showSetupScreen();
             }
             setupEventListeners();
-            initTradeSlotsUI();
+            initSlotsUI('my-offer-slots', 'their-offer-slots', 'trade-slot');
+            initSlotsUI('my-battle-slots', 'their-battle-slots', 'battle-slot', 3);
+            initSlotsUI('my-raid-slots', null, 'battle-slot', 2);
             checkPackReset();
+        }
+
+        function initSlotsUI(myContainerId, theirContainerId, baseClass, count = 3) {
+            const mySlots = document.getElementById(myContainerId);
+            if(mySlots) mySlots.innerHTML = ''; 
+            const theirSlots = theirContainerId ? document.getElementById(theirContainerId) : null;
+            if(theirSlots) theirSlots.innerHTML = '';
+            
+            for(let i=0; i<count; i++) {
+                if(mySlots) {
+                    mySlots.innerHTML += `<div class="${baseClass} my-slot group cursor-pointer" data-index="${i}">
+                        <i class="fa-solid fa-plus text-gray-600 text-2xl group-hover:text-blue-400 transition-colors my-plus"></i>
+                        <img src="" class="hidden rounded-xl my-img">
+                        <button class="btn-remove absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs hidden shadow-xl z-10 hover:bg-red-400"><i class="fa-solid fa-times"></i></button>
+                    </div>`;
+                }
+                if(theirSlots) {
+                    theirSlots.innerHTML += `<div class="${baseClass} their-slot" data-index="${i}">
+                        <i class="fa-solid fa-question text-gray-700 text-2xl opacity-50 their-q"></i>
+                        <img src="" class="hidden rounded-xl their-img">
+                    </div>`;
+                }
+            }
+            
+            if(mySlots) {
+                mySlots.querySelectorAll('.my-slot').forEach(el => {
+                    el.addEventListener('click', (e) => {
+                        if (e.target.closest('.btn-remove')) {
+                            e.stopPropagation();
+                            if(myContainerId === 'my-offer-slots') removeTradeOffer(parseInt(el.dataset.index));
+                            if(myContainerId === 'my-battle-slots') removeBattleOffer(parseInt(el.dataset.index));
+                            if(myContainerId === 'my-raid-slots') removeRaidOffer(parseInt(el.dataset.index));
+                        } else {
+                            if(myContainerId === 'my-offer-slots') openSelectCardModal(parseInt(el.dataset.index), 'trade');
+                            if(myContainerId === 'my-battle-slots') openSelectCardModal(parseInt(el.dataset.index), 'battle');
+                            if(myContainerId === 'my-raid-slots') openSelectCardModal(parseInt(el.dataset.index), 'raid');
+                        }
+                    });
+                });
+            }
         }
 
         async function fetchPogoRarities() {
@@ -1329,17 +1513,37 @@
                 if(db) { updatePresence(); renderNetworkList(); showToast("Radar pulse sent", "success"); }
             });
 
-            document.querySelectorAll('.close-modal, .close-select, .close-battle').forEach(btn => { 
+            document.querySelectorAll('.close-modal, .close-select').forEach(btn => { 
                 btn.addEventListener('click', (e) => { e.target.closest('.modal-overlay').classList.remove('active'); }); 
             });
 
+            // Trade Events
             document.getElementById('btn-trade-lock').addEventListener('click', toggleTradeLock);
             document.getElementById('btn-trade-accept').addEventListener('click', acceptTrade);
             document.querySelector('.close-trade').addEventListener('click', cancelTrade);
-            
             document.getElementById('btn-send-chat').addEventListener('click', sendChat);
             document.getElementById('trade-chat-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendChat(); });
             
+            // Battle Setup Events
+            document.getElementById('btn-battle-lock').addEventListener('click', toggleBattleLock);
+            document.querySelector('.close-battle-setup').addEventListener('click', cancelBattleSetup);
+            
+            // Raid Events
+            document.getElementById('btn-host-raid').addEventListener('click', hostRaid);
+            document.getElementById('btn-join-raid').addEventListener('click', joinRaid);
+            document.querySelector('.close-raid-lobby').addEventListener('click', leaveRaid);
+            document.querySelector('.close-raid-arena').addEventListener('click', leaveRaid);
+            document.querySelector('.close-raid-result').addEventListener('click', () => {
+                document.getElementById('raid-result-overlay').classList.add('hidden');
+                document.getElementById('raid-result-overlay').classList.remove('flex');
+                document.getElementById('modal-raid-arena').classList.remove('active');
+                state.activeRaid = null;
+                renderCollection();
+            });
+            document.getElementById('btn-raid-ready').addEventListener('click', toggleRaidReady);
+            document.getElementById('btn-start-raid').addEventListener('click', startRaid);
+            document.getElementById('btn-raid-attack').addEventListener('click', attackRaidBoss);
+
             document.addEventListener('click', (e) => { if (e.target.closest('.flip-card')) e.target.closest('.flip-card').classList.toggle('is-flipped'); });
 
             document.getElementById('btn-toggle-showcase').addEventListener('click', () => {
@@ -1354,17 +1558,13 @@
             document.getElementById('btn-sell-card').addEventListener('click', async () => {
                 if (state.hasPendingSell) return showToast("You already have a pending sell request.", "error");
                 if (!state.activeDetailCard) return;
-                
                 if (state.activeDetailCard.currentHp <= 0) return showToast("You cannot sell fainted Pokémon.", "error");
 
                 const reqRef = doc(db, 'artifacts', appId, 'public', 'data', 'sellRequests', state.userId);
                 try {
                     await setDoc(reqRef, {
-                        userId: state.userId,
-                        userName: state.profile.name,
-                        card: state.activeDetailCard,
-                        status: 'pending',
-                        timestamp: getNow()
+                        userId: state.userId, userName: state.profile.name, card: state.activeDetailCard,
+                        status: 'pending', timestamp: getNow()
                     });
                     
                     state.hasPendingSell = true;
@@ -1388,6 +1588,24 @@
                 document.getElementById('modal-save-data').classList.add('active');
             });
 
+            document.getElementById('btn-import-save').addEventListener('click', () => {
+                document.getElementById('save-modal-title').textContent = 'Import Save';
+                document.getElementById('save-data-code').value = '';
+                const btn = document.getElementById('btn-save-modal-action');
+                btn.textContent = 'Restore Account';
+                btn.onclick = () => {
+                    try {
+                        const val = document.getElementById('save-data-code').value.trim();
+                        const decoded = atob(val);
+                        if (decoded.startsWith('pokelocal_save:')) {
+                            localStorage.setItem(`pokeLocal_userId_${appId}`, decoded.split(':')[1]);
+                            showToast("Account restored! Reloading...", "success"); setTimeout(() => window.location.reload(), 1000);
+                        } else throw new Error();
+                    } catch(e) { showToast("Invalid save code.", "error"); }
+                };
+                document.getElementById('modal-save-data').classList.add('active');
+            });
+
             document.getElementById('btn-sign-out').addEventListener('click', async () => {
                 try {
                     await auth.signOut();
@@ -1398,12 +1616,11 @@
                 }
             });
 
-            // Mobile Refresh Button
             const mobileRefreshBtn = document.getElementById('btn-mobile-refresh');
             if (mobileRefreshBtn) {
                 mobileRefreshBtn.addEventListener('click', () => {
                     mobileRefreshBtn.querySelector('i').classList.add('fa-spin');
-                    showToast("Refreshing page...", "info");
+                    showToast("Syncing Database...", "info");
                     setTimeout(() => window.location.reload(), 400);
                 });
             }
@@ -1789,25 +2006,62 @@
             firebaseListeners.battles = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'battles'), (snapshot) => {
                 snapshot.docChanges().forEach(change => {
                     const data = change.doc.data();
-                    if (data.receiver === state.userId && data.status === 'requested') {
-                        showToast(`Battle Request from ${data.initiatorName}`, 'battle', 10000, {
-                            onAccept: () => acceptBattle(data),
-                            onDecline: () => updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'battles', data.id), { status: 'rejected' })
+                    
+                    if (data.status === 'setup' && data.receiver === state.userId && !data.receiverAccepted && !data.dismissedBy?.includes(state.userId)) {
+                        showToast(`Battle Challenge from ${data.initiatorName}`, 'battle', 10000, {
+                            onAccept: () => acceptBattleSetup(data),
+                            onDecline: () => updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'battles', data.id), { status: 'rejected', dismissedBy: [state.userId, data.initiator] })
                         });
                     }
+
+                    if (data.status === 'setup' && (data.initiator === state.userId || (data.receiver === state.userId && data.receiverAccepted)) && !state.activeBattleSetup) {
+                        openBattleSetupUI(data);
+                    }
+
+                    if (data.status === 'setup' && state.activeBattleSetup && state.activeBattleSetup.id === data.id) {
+                        syncBattleSetupUI(data);
+                    }
+
                     if ((data.initiator === state.userId || data.receiver === state.userId) && data.status === 'battling') {
+                        if(state.activeBattleSetup) {
+                            document.getElementById('modal-battle-setup').classList.remove('active');
+                            state.activeBattleSetup = null;
+                        }
                         state.activeBattle = data;
                         renderBattleArena();
                     }
                     if ((data.initiator === state.userId || data.receiver === state.userId) && data.status === 'completed') {
-                        state.activeBattle = data;
-                        renderBattleArena();
-                        setTimeout(() => showBattleResult(), 2000);
+                        if (!data.dismissedBy?.includes(state.userId)) {
+                            state.activeBattle = data;
+                            renderBattleArena();
+                            setTimeout(() => showBattleResult(), 1500);
+                        }
                     }
                 });
             }, () => {});
             
-            // Listen for changes to personal sell request from admin
+            // Raids listener
+            firebaseListeners.activeRaid = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'raids'), (snapshot) => {
+                snapshot.docChanges().forEach(change => {
+                    const data = change.doc.data();
+                    if (!state.activeRaid) return;
+                    if (data.id === state.activeRaid.id) {
+                        state.activeRaid = data;
+                        if (data.status === 'lobby') renderRaidLobby();
+                        if (data.status === 'active') {
+                            document.getElementById('modal-raid-lobby').classList.remove('active');
+                            renderRaidArena();
+                        }
+                        if (data.status === 'completed') {
+                            if (!data.dismissedBy?.includes(state.userId)) {
+                                renderRaidArena();
+                                setTimeout(() => showRaidResult(), 1500);
+                            }
+                        }
+                    }
+                });
+            }, () => {});
+
             firebaseListeners.sellRequest = onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'sellRequests', state.userId), (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
@@ -1820,27 +2074,17 @@
                         state.profile.inventory.revive = (state.profile.inventory.revive || 0) + (rewards.revives || 0);
                         state.profile.inventory.freeRips = (state.profile.inventory.freeRips || 0) + (rewards.rips || 0);
 
-                        // Securely remove card
                         state.collection = state.collection.filter(c => c.id !== data.card.id);
-
-                        saveCloudData();
-                        deleteDoc(docSnap.ref);
-                        state.hasPendingSell = false;
-                        
-                        renderCollection();
-                        updateProfileUI();
-                        updateDetailModalUI();
+                        saveCloudData(); deleteDoc(docSnap.ref); state.hasPendingSell = false;
+                        renderCollection(); updateProfileUI(); updateDetailModalUI();
                         
                         showToast(`Admin approved your sale! +${rewards.coins || 0} Coins, +${rewards.revives || 0} Revives, +${rewards.rips || 0} Free Rips!`, "success", 6000);
                     } else if (data.status === 'rejected') {
-                        deleteDoc(docSnap.ref);
-                        state.hasPendingSell = false;
-                        updateDetailModalUI();
+                        deleteDoc(docSnap.ref); state.hasPendingSell = false; updateDetailModalUI();
                         showToast("Admin rejected your sale request.", "error", 6000);
                     }
                 } else {
-                    state.hasPendingSell = false;
-                    updateDetailModalUI();
+                    state.hasPendingSell = false; updateDetailModalUI();
                 }
             }, () => {});
 
@@ -1887,124 +2131,36 @@
                         <button class="btn-battle text-xs bg-[#151821] border border-[#262b3a] hover:bg-red-600 text-white px-3 py-2 rounded-xl transition-all shadow-md"><i class="fa-solid fa-fire"></i> Battle</button>
                     </div>`;
                 el.querySelector('.btn-trade').addEventListener('click', () => initiateTrade(uid));
-                el.querySelector('.btn-battle').addEventListener('click', () => initiateBattle(uid, u.name));
+                el.querySelector('.btn-battle').addEventListener('click', () => initiateBattleSetup(uid, u.name));
                 textList.appendChild(el);
             });
         }
 
-        function initTradeSlotsUI() {
-            const mySlots = document.getElementById('my-offer-slots');
-            const theirSlots = document.getElementById('their-offer-slots');
-            mySlots.innerHTML = ''; theirSlots.innerHTML = '';
-            for(let i=0; i<3; i++) {
-                mySlots.innerHTML += `<div class="trade-slot my-slot group cursor-pointer" data-index="${i}">
-                    <i class="fa-solid fa-plus text-gray-600 text-2xl group-hover:text-blue-400 transition-colors my-plus"></i>
-                    <img src="" class="hidden rounded-xl my-img">
-                    <button class="btn-remove absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs hidden shadow-xl z-10 hover:bg-red-400"><i class="fa-solid fa-times"></i></button>
-                </div>`;
-                theirSlots.innerHTML += `<div class="trade-slot their-slot" data-index="${i}">
-                    <i class="fa-solid fa-question text-gray-700 text-2xl opacity-50 their-q"></i>
-                    <img src="" class="hidden rounded-xl their-img">
-                </div>`;
-            }
-            document.querySelectorAll('.my-slot').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    if (e.target.closest('.btn-remove')) {
-                        e.stopPropagation();
-                        removeOffer(parseInt(el.dataset.index));
-                    } else {
-                        openSelectCardModal(parseInt(el.dataset.index));
-                    }
-                });
-            });
-        }
+        function openSelectCardModal(index, context) {
+            state.activeSlotIndex = index;
+            state.cardSelectContext = context;
+            
+            if (context === 'trade' && document.getElementById('my-trade-status').textContent === 'Locked') return;
+            if (context === 'battle' && document.getElementById('my-battle-status').textContent === 'Locked') return;
+            if (context === 'raid' && state.activeRaid?.players[state.userId]?.ready) return;
 
-        async function initiateTrade(targetUid) {
-            if (!db || !state.userId) return;
-            const tradeId = [state.userId, targetUid].sort().join('_');
-            try {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'trades', tradeId), {
-                    id: tradeId, status: 'requested', initiator: state.userId, receiver: targetUid, timestamp: getNow(),
-                    [state.userId]: { locked: false, offers: [null, null, null], name: state.profile.name }, 
-                    [targetUid]: { locked: false, offers: [null, null, null], name: state.onlineUsers[targetUid]?.name || 'Trainer' }, chat: []
-                });
-                showToast("Link request transmitted.", "info");
-            } catch (e) { showToast("Target out of range.", "error"); }
-        }
-
-        function openTradeUI(tradeId, partnerId) {
-            state.activeTrade = { id: tradeId, partnerId: partnerId, localOffers: [null, null, null] };
-            document.getElementById('trade-partner-name').textContent = state.onlineUsers[partnerId]?.name || 'Trainer';
+            const grid = document.getElementById('select-collection-grid'); grid.innerHTML = '';
             
-            document.querySelectorAll('.my-slot').forEach(slot => { slot.querySelector('.my-img').classList.add('hidden'); slot.querySelector('.my-plus').classList.remove('hidden'); slot.querySelector('.btn-remove').classList.add('hidden'); });
-            document.querySelectorAll('.their-slot').forEach(slot => { slot.querySelector('.their-img').classList.add('hidden'); slot.querySelector('.their-q').classList.remove('hidden'); });
+            let offeredIds = [];
+            if (context === 'trade') offeredIds = state.activeTrade.localOffers.filter(o => o).map(o => o.id);
+            if (context === 'battle') offeredIds = state.activeBattleSetup.localOffers.filter(o => o).map(o => o.id);
+            if (context === 'raid') offeredIds = state.activeRaid.players[state.userId].team.filter(o => o).map(o => o.id);
             
-            document.getElementById('modal-trade').classList.add('active');
-            firebaseListeners.activeTrade = onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'trades', tradeId), (docSnap) => {
-                if (docSnap.exists()) handleTradeSync(docSnap.data(), partnerId); else forceCloseTrade();
-            }, () => {});
-        }
-
-        function handleTradeSync(data, partnerId) {
-            if (data.status === 'cancelled' || data.status === 'rejected') { forceCloseTrade("Link severed.", "error"); return; }
-            if (data.status === 'completed') { finalizeTradeLocally(data); return; }
-            
-            const me = data[state.userId] || { locked: false, offers: [null,null,null] };
-            const them = data[partnerId] || { locked: false, offers: [null,null,null] };
-            
-            document.querySelectorAll('.their-slot').forEach((slot, i) => {
-                const offer = them.offers[i];
-                if (offer) { slot.querySelector('.their-img').src = offer.image; slot.querySelector('.their-img').classList.remove('hidden'); slot.querySelector('.their-q').classList.add('hidden'); } 
-                else { slot.querySelector('.their-img').classList.add('hidden'); slot.querySelector('.their-q').classList.remove('hidden'); }
-            });
-            
-            const btnLock = document.getElementById('btn-trade-lock'), btnAccept = document.getElementById('btn-trade-accept');
-            const myStatus = document.getElementById('my-trade-status'), theirStatus = document.getElementById('their-trade-status');
-            
-            theirStatus.textContent = them.locked ? 'Locked' : 'Selecting...';
-            myStatus.textContent = me.locked ? 'Locked' : 'Selecting...';
-
-            if (me.locked) {
-                btnLock.textContent = 'Unlock'; btnLock.style.background = '#ef4444';
-                document.querySelectorAll('.btn-remove').forEach(b => b.classList.add('hidden'));
-            } else {
-                btnLock.textContent = 'Lock Offer'; btnLock.style.background = '#151821';
-                document.querySelectorAll('.my-slot').forEach((slot, i) => { if(state.activeTrade.localOffers[i]) slot.querySelector('.btn-remove').classList.remove('hidden'); });
-            }
-            
-            if (me.locked && them.locked) {
-                btnAccept.classList.remove('hidden'); btnLock.classList.add('hidden');
-                if (me.accepted) { btnAccept.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing'; btnAccept.disabled = true; } 
-                else { btnAccept.innerHTML = '<i class="fa-solid fa-check"></i> Accept'; btnAccept.disabled = false; }
-                if (me.accepted && them.accepted) finishTradeFirebase(data);
-            } else {
-                btnAccept.classList.add('hidden'); btnLock.classList.remove('hidden');
-                if(me.accepted) updateTradeState({ accepted: false });
-            }
-            renderChat(data.chat);
-        }
-
-        let activeSlotIndex = 0;
-        function openSelectCardModal(index) {
-            if (document.getElementById('my-trade-status').textContent === 'Locked') return;
-            activeSlotIndex = index;
-            const grid = document.getElementById('trade-collection-grid'); grid.innerHTML = '';
-            
-            const offeredIds = state.activeTrade.localOffers.filter(o => o).map(o => o.id);
             const availableCards = state.collection.filter(c => !offeredIds.includes(c.id) && c.currentHp > 0);
 
             if (availableCards.length === 0) { grid.innerHTML = '<div class="col-span-full text-center py-10">No eligible cards available (Heal fainted Pokemon first).</div>'; } 
             else {
                 availableCards.forEach(card => {
                     const el = document.createElement('div');
-                    el.className = `relative aspect-[63/88] border-4 ${card.rarityClass} rounded-2xl bg-[#f3f4f6] cursor-pointer overflow-hidden p-2`;
+                    el.className = `relative aspect-[63/88] border-4 ${card.rarityClass} rounded-2xl bg-[#f3f4f6] cursor-pointer overflow-hidden p-2 hover:scale-105 transition-transform`;
                     el.innerHTML = `<img src="${card.image}" class="w-full h-full object-contain filter drop-shadow">`;
                     el.addEventListener('click', () => {
-                        state.activeTrade.localOffers[activeSlotIndex] = card;
-                        const slot = document.querySelector(`.my-slot[data-index="${activeSlotIndex}"]`);
-                        slot.querySelector('.my-img').src = card.image; slot.querySelector('.my-img').classList.remove('hidden');
-                        slot.querySelector('.my-plus').classList.add('hidden'); slot.querySelector('.btn-remove').classList.remove('hidden');
-                        updateTradeState({ offers: state.activeTrade.localOffers });
+                        handleCardSelection(card, index, context);
                         document.getElementById('modal-select-card').classList.remove('active');
                     });
                     grid.appendChild(el);
@@ -2013,7 +2169,29 @@
             document.getElementById('modal-select-card').classList.add('active');
         }
 
-        function removeOffer(index) {
+        function handleCardSelection(card, index, context) {
+            if (context === 'trade') {
+                state.activeTrade.localOffers[index] = card;
+                const slot = document.querySelector(`.my-slot[data-index="${index}"]`);
+                slot.querySelector('.my-img').src = card.image; slot.querySelector('.my-img').classList.remove('hidden');
+                slot.querySelector('.my-plus').classList.add('hidden'); slot.querySelector('.btn-remove').classList.remove('hidden');
+                updateTradeState({ offers: state.activeTrade.localOffers });
+            } else if (context === 'battle') {
+                state.activeBattleSetup.localOffers[index] = card;
+                const slot = document.querySelector(`#my-battle-slots .my-slot[data-index="${index}"]`);
+                slot.querySelector('.my-img').src = card.image; slot.querySelector('.my-img').classList.remove('hidden');
+                slot.querySelector('.my-plus').classList.add('hidden'); slot.querySelector('.btn-remove').classList.remove('hidden');
+                updateBattleSetupState({ team: state.activeBattleSetup.localOffers.filter(Boolean) });
+            } else if (context === 'raid') {
+                state.activeRaid.players[state.userId].team[index] = card;
+                const slot = document.querySelector(`#my-raid-slots .my-slot[data-index="${index}"]`);
+                slot.querySelector('.my-img').src = card.image; slot.querySelector('.my-img').classList.remove('hidden');
+                slot.querySelector('.my-plus').classList.add('hidden'); slot.querySelector('.btn-remove').classList.remove('hidden');
+                updateRaidState({ [`players.${state.userId}.team`]: state.activeRaid.players[state.userId].team });
+            }
+        }
+
+        function removeTradeOffer(index) {
             state.activeTrade.localOffers[index] = null;
             const slot = document.querySelector(`.my-slot[data-index="${index}"]`);
             slot.querySelector('.my-img').classList.add('hidden');
@@ -2084,6 +2262,7 @@
                 }
             } catch(e) {}
         }
+
         function renderChat(chatArr) {
             const container = document.getElementById('trade-chat-messages'); if(!chatArr) return;
             const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 10;
@@ -2095,35 +2274,125 @@
             if(isScrolledToBottom) container.scrollTop = container.scrollHeight;
         }
 
-        async function initiateBattle(targetUid, targetName) {
-            const aliveCards = state.collection.filter(c => c.currentHp > 0);
-            if (aliveCards.length < 3) return showToast("You need 3 conscious Pokemon to battle. Use Revives/Potions.", "error");
-            
-            const bestCards = aliveCards.sort((a,b) => b.bst - a.bst).slice(0, 3);
-            const teamPayload = bestCards.map(c => ({ id: c.id, name: c.name, bst: c.bst, image: c.image, hp: c.hp, currentHp: c.currentHp, atk: c.atk, def: c.def, spd: c.spd }));
-
+        async function initiateBattleSetup(targetUid, targetName) {
             const battleId = 'b_' + Date.now() + '_' + state.userId;
             await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'battles', battleId), {
-                id: battleId, status: 'requested', initiator: state.userId, initiatorName: state.profile.name,
-                receiver: targetUid, timestamp: getNow(), initiatorTeam: teamPayload
+                id: battleId, status: 'setup', initiator: state.userId, initiatorName: state.profile.name,
+                receiver: targetUid, receiverName: targetName, timestamp: getNow(),
+                initiatorLocked: false, receiverLocked: false, receiverAccepted: false,
+                initiatorTeam: [], receiverTeam: [], dismissedBy: []
             });
-            showToast("Battle Challenge Sent!", "info");
+            showToast("Battle Challenge Sent! Waiting for response...", "info");
         }
 
-        async function acceptBattle(data) {
-            const aliveCards = state.collection.filter(c => c.currentHp > 0);
-            if (aliveCards.length < 3) {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'battles', data.id), { status: 'rejected' });
-                return showToast("Not enough conscious Pokemon to battle. Challenge rejected.", "error");
-            }
-            const bestCards = aliveCards.sort((a,b) => b.bst - a.bst).slice(0, 3);
-            const myTeam = bestCards.map(c => ({ id: c.id, name: c.name, bst: c.bst, image: c.image, hp: c.hp, currentHp: c.currentHp, atk: c.atk, def: c.def, spd: c.spd }));
+        async function acceptBattleSetup(data) {
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'battles', data.id), { receiverAccepted: true });
+            openBattleSetupUI(data);
+        }
 
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'battles', data.id), {
-                status: 'battling', receiverTeam: myTeam, receiverName: state.profile.name,
-                p1Active: 0, p2Active: 0, turn: data.initiatorTeam[0].spd > myTeam[0].spd ? data.initiator : state.userId,
-                log: [{msg: 'Battle commenced!', timestamp: Date.now()}]
+        function openBattleSetupUI(data) {
+            state.activeBattleSetup = { id: data.id, partnerId: data.initiator === state.userId ? data.receiver : data.initiator, localOffers: [null, null, null] };
+            document.getElementById('battle-setup-partner').textContent = data.initiator === state.userId ? data.receiverName : data.initiatorName;
+            
+            document.querySelectorAll('#my-battle-slots .my-slot').forEach(slot => { slot.querySelector('.my-img').classList.add('hidden'); slot.querySelector('.my-plus').classList.remove('hidden'); slot.querySelector('.btn-remove').classList.add('hidden'); });
+            document.querySelectorAll('#their-battle-slots .their-slot').forEach(slot => { slot.querySelector('.their-img').classList.add('hidden'); slot.querySelector('.their-q').classList.remove('hidden'); });
+            
+            document.getElementById('modal-battle-setup').classList.add('active');
+        }
+
+        function removeBattleOffer(index) {
+            state.activeBattleSetup.localOffers[index] = null;
+            const slot = document.querySelector(`#my-battle-slots .my-slot[data-index="${index}"]`);
+            slot.querySelector('.my-img').classList.add('hidden');
+            slot.querySelector('.my-plus').classList.remove('hidden');
+            slot.querySelector('.btn-remove').classList.add('hidden');
+            updateBattleSetupState({ team: state.activeBattleSetup.localOffers.filter(Boolean) });
+        }
+
+        function toggleBattleLock() {
+            const isP1 = state.activeBattleSetup.partnerId !== state.userId;
+            const isLocked = document.getElementById('my-battle-status').textContent === 'Locked';
+            const team = state.activeBattleSetup.localOffers.filter(Boolean);
+            
+            if (isLocked) {
+                updateBattleSetupState({ locked: false });
+            } else if (team.length > 0) {
+                updateBattleSetupState({ locked: true });
+            } else {
+                showToast("Select at least 1 Pokemon to battle.", "error");
+            }
+        }
+
+        async function updateBattleSetupState(updates) {
+            if (!state.activeBattleSetup || !db) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'battles', state.activeBattleSetup.id);
+            const snap = await getDoc(docRef);
+            if(!snap.exists()) return;
+            const data = snap.data();
+            const isP1 = data.initiator === state.userId;
+            
+            const fbUpdates = {};
+            if (updates.team !== undefined) {
+                fbUpdates[isP1 ? 'initiatorTeam' : 'receiverTeam'] = updates.team.map(c => ({ id: c.id, name: c.name, bst: c.bst, image: c.image, hp: c.hp, currentHp: c.currentHp, atk: c.atk, def: c.def, spd: c.spd }));
+            }
+            if (updates.locked !== undefined) {
+                fbUpdates[isP1 ? 'initiatorLocked' : 'receiverLocked'] = updates.locked;
+            }
+            
+            await updateDoc(docRef, fbUpdates);
+            
+            // Check if both locked now
+            const newSnap = await getDoc(docRef);
+            const newData = newSnap.data();
+            if (newData.initiatorLocked && newData.receiverLocked && newData.status === 'setup') {
+                if (isP1) {
+                    const firstTurn = newData.initiatorTeam[0].spd > newData.receiverTeam[0].spd ? data.initiator : data.receiver;
+                    await updateDoc(docRef, {
+                        status: 'battling', p1Active: 0, p2Active: 0, turn: firstTurn, log: [{msg: 'Battle commenced!', timestamp: Date.now()}]
+                    });
+                }
+            }
+        }
+
+        function syncBattleSetupUI(data) {
+            if (data.status === 'rejected' || data.status === 'cancelled') {
+                document.getElementById('modal-battle-setup').classList.remove('active');
+                state.activeBattleSetup = null;
+                showToast("Battle cancelled.", "error");
+                return;
+            }
+
+            const isP1 = data.initiator === state.userId;
+            const myTeam = isP1 ? data.initiatorTeam : data.receiverTeam;
+            const theirTeam = isP1 ? data.receiverTeam : data.initiatorTeam;
+            const myLocked = isP1 ? data.initiatorLocked : data.receiverLocked;
+            const theirLocked = isP1 ? data.receiverLocked : data.initiatorLocked;
+
+            document.querySelectorAll('#their-battle-slots .their-slot').forEach((slot, i) => {
+                const offer = theirTeam[i];
+                if (offer) { slot.querySelector('.their-img').src = offer.image; slot.querySelector('.their-img').classList.remove('hidden'); slot.querySelector('.their-q').classList.add('hidden'); } 
+                else { slot.querySelector('.their-img').classList.add('hidden'); slot.querySelector('.their-q').classList.remove('hidden'); }
             });
+
+            const btnLock = document.getElementById('btn-battle-lock');
+            document.getElementById('their-battle-status').textContent = theirLocked ? 'Locked' : 'Selecting...';
+            document.getElementById('my-battle-status').textContent = myLocked ? 'Locked' : 'Selecting...';
+
+            if (myLocked) {
+                btnLock.innerHTML = '<i class="fa-solid fa-unlock mr-2"></i>Unlock'; btnLock.style.background = '#ef4444';
+                document.querySelectorAll('#my-battle-slots .btn-remove').forEach(b => b.classList.add('hidden'));
+            } else {
+                btnLock.innerHTML = '<i class="fa-solid fa-lock mr-2"></i>Lock Team'; btnLock.style.background = '#151821';
+                document.querySelectorAll('#my-battle-slots .my-slot').forEach((slot, i) => { if(state.activeBattleSetup.localOffers[i]) slot.querySelector('.btn-remove').classList.remove('hidden'); });
+            }
+        }
+
+        async function cancelBattleSetup() {
+            if (state.activeBattleSetup && db) {
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'battles', state.activeBattleSetup.id), { status: 'cancelled' });
+            }
+            document.getElementById('modal-battle-setup').classList.remove('active');
+            state.activeBattleSetup = null;
         }
 
         function renderBattleArena() {
@@ -2217,7 +2486,7 @@
             if (defender.currentHp <= 0) {
                 newLog.push({ msg: `${defender.name} fainted!`, timestamp: Date.now()+1 });
                 let nextIdx = -1;
-                for(let i=0; i<3; i++) { if (theirTeam[i].currentHp > 0) { nextIdx = i; break; } }
+                for(let i=0; i<theirTeam.length; i++) { if (theirTeam[i].currentHp > 0) { nextIdx = i; break; } }
                 if (nextIdx !== -1) {
                     theirActiveIdx = nextIdx;
                     newLog.push({ msg: `Opponent sent out ${theirTeam[nextIdx].name}!`, timestamp: Date.now()+2 });
@@ -2299,11 +2568,321 @@
                 }
             }
 
-            document.querySelector('.close-arena').onclick = () => {
+            document.querySelector('.close-arena').onclick = async () => {
                 overlay.classList.add('hidden');
                 overlay.classList.remove('flex');
                 document.getElementById('modal-battle-arena').classList.remove('active');
+                
+                const b = state.activeBattle;
+                if (b) {
+                    const dismissedBy = b.dismissedBy || [];
+                    if (!dismissedBy.includes(state.userId)) {
+                        dismissedBy.push(state.userId);
+                        try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'battles', b.id), { dismissedBy }); } catch(e){}
+                    }
+                }
                 state.activeBattle = null;
+                renderCollection();
+            };
+        }
+
+        async function generateRaidBoss() {
+            const legendaryIds = [144, 145, 146, 150, 151, 249, 250, 251, 384, 385, 483, 484, 487, 493];
+            const id = legendaryIds[Math.floor(Math.random() * legendaryIds.length)];
+            const res = await fetch(`${POKEAPI_BASE}/pokemon/${id}`);
+            const data = await res.json();
+            const hp = 5000 + Math.floor(Math.random() * 5000);
+            return {
+                name: data.name,
+                image: data.sprites.other['official-artwork'].front_default,
+                maxHp: hp, currentHp: hp,
+                atk: 300, def: 200
+            };
+        }
+
+        async function hostRaid() {
+            if(!db || !state.userId) return;
+            const code = Math.floor(100000 + Math.random() * 900000).toString();
+            const boss = await generateRaidBoss();
+            
+            const raidData = {
+                id: code,
+                hostId: state.userId,
+                status: 'lobby', // 'lobby', 'active', 'completed'
+                boss: boss,
+                players: {
+                    [state.userId]: { name: state.profile.name, team: [null, null], damage: 0, ready: false }
+                },
+                log: [], dismissedBy: []
+            };
+            
+            try {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'raids', code), raidData);
+                state.activeRaid = raidData;
+                document.getElementById('modal-raid-lobby').classList.add('active');
+                renderRaidLobby();
+                showToast(`Raid Lobby created! Code: ${code}`, "success");
+            } catch(e) { showToast("Failed to create raid.", "error"); }
+        }
+
+        async function joinRaid() {
+            if(!db || !state.userId) return;
+            const code = document.getElementById('join-raid-code').value.trim();
+            if(code.length !== 6) return showToast("Enter a 6-digit raid code.", "error");
+            
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'raids', code);
+            const snap = await getDoc(docRef);
+            if(!snap.exists()) return showToast("Raid not found.", "error");
+            
+            const data = snap.data();
+            if(data.status !== 'lobby') return showToast("Raid already started or finished.", "error");
+            if(Object.keys(data.players).length >= 8) return showToast("Raid is full.", "error");
+            
+            try {
+                await updateDoc(docRef, {
+                    [`players.${state.userId}`]: { name: state.profile.name, team: [null, null], damage: 0, ready: false }
+                });
+                state.activeRaid = data;
+                document.getElementById('modal-raid-lobby').classList.add('active');
+                renderRaidLobby();
+            } catch(e) { showToast("Error joining raid.", "error"); }
+        }
+
+        function removeRaidOffer(index) {
+            if(!state.activeRaid || state.activeRaid.players[state.userId].ready) return;
+            state.activeRaid.players[state.userId].team[index] = null;
+            const slot = document.querySelector(`#my-raid-slots .my-slot[data-index="${index}"]`);
+            slot.querySelector('.my-img').classList.add('hidden');
+            slot.querySelector('.my-plus').classList.remove('hidden');
+            slot.querySelector('.btn-remove').classList.add('hidden');
+            updateRaidState({ [`players.${state.userId}.team`]: state.activeRaid.players[state.userId].team });
+        }
+
+        async function toggleRaidReady() {
+            if(!state.activeRaid) return;
+            const team = state.activeRaid.players[state.userId].team.filter(Boolean);
+            if(team.length === 0) return showToast("Select at least 1 Pokemon.", "error");
+            
+            const isReady = state.activeRaid.players[state.userId].ready;
+            await updateRaidState({ [`players.${state.userId}.ready`]: !isReady });
+        }
+
+        async function updateRaidState(updates) {
+            if(!state.activeRaid || !db) return;
+            try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'raids', state.activeRaid.id), updates); } catch(e){}
+        }
+
+        function renderRaidLobby() {
+            if(!state.activeRaid) return;
+            const r = state.activeRaid;
+            document.getElementById('raid-lobby-code').textContent = r.id;
+            
+            const uids = Object.keys(r.players);
+            document.getElementById('raid-player-count').textContent = uids.length;
+            
+            const list = document.getElementById('raid-players-list');
+            list.innerHTML = uids.map(uid => {
+                const p = r.players[uid];
+                return `<div class="flex justify-between items-center bg-[#0b0c10] p-3 rounded-xl border ${p.ready ? 'border-green-500' : 'border-[#262b3a]'}">
+                    <div class="font-black text-sm text-white flex items-center gap-2">
+                        ${uid === r.hostId ? '<i class="fa-solid fa-crown text-yellow-500"></i>' : ''} ${p.name}
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest ${p.ready ? 'text-green-500' : 'text-gray-500'}">${p.ready ? 'Ready' : 'Selecting'}</span>
+                </div>`;
+            }).join('');
+
+            const myData = r.players[state.userId];
+            const btnReady = document.getElementById('btn-raid-ready');
+            if (myData.ready) {
+                btnReady.innerHTML = '<i class="fa-solid fa-times mr-2"></i> Unready'; btnReady.classList.replace('bg-[#0b0c10]', 'bg-green-600'); btnReady.classList.replace('border-purple-700', 'border-green-500');
+                document.querySelectorAll('#my-raid-slots .btn-remove').forEach(b => b.classList.add('hidden'));
+            } else {
+                btnReady.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Ready Up'; btnReady.classList.replace('bg-green-600', 'bg-[#0b0c10]'); btnReady.classList.replace('border-green-500', 'border-purple-700');
+                document.querySelectorAll('#my-raid-slots .my-slot').forEach((slot, i) => { if(myData.team[i]) slot.querySelector('.btn-remove').classList.remove('hidden'); });
+            }
+
+            const btnStart = document.getElementById('btn-start-raid');
+            if (r.hostId === state.userId) {
+                btnStart.classList.remove('hidden');
+                const allReady = uids.every(uid => r.players[uid].ready);
+                btnStart.disabled = !allReady;
+                btnStart.style.opacity = allReady ? '1' : '0.5';
+            } else {
+                btnStart.classList.add('hidden');
+            }
+        }
+
+        async function startRaid() {
+            if(!state.activeRaid || state.activeRaid.hostId !== state.userId) return;
+            await updateRaidState({ status: 'active' });
+        }
+
+        async function leaveRaid() {
+            if(!state.activeRaid) return;
+            document.getElementById('modal-raid-lobby').classList.remove('active');
+            document.getElementById('modal-raid-arena').classList.remove('active');
+            // Hard to gracefully remove player mid-raid, for simplicity we just stop tracking it locally.
+            state.activeRaid = null;
+        }
+
+        function renderRaidArena() {
+            if(!state.activeRaid) return;
+            const r = state.activeRaid;
+            
+            document.getElementById('raid-boss-img').src = r.boss.image;
+            document.getElementById('raid-boss-name').textContent = r.boss.name;
+            document.getElementById('raid-boss-hp-val').textContent = r.boss.currentHp;
+            document.getElementById('raid-boss-hp-max').textContent = r.boss.maxHp;
+            const pct = Math.max(0, (r.boss.currentHp / r.boss.maxHp) * 100);
+            document.getElementById('raid-boss-hp-bar').style.width = pct + '%';
+            
+            document.getElementById('raid-arena-count').textContent = Object.keys(r.players).length;
+
+            const myData = r.players[state.userId];
+            if(myData) document.getElementById('raid-my-damage').textContent = myData.damage;
+
+            const myTeamUI = document.getElementById('raid-my-active-team');
+            if (myData) {
+                myTeamUI.innerHTML = myData.team.filter(Boolean).map(c => {
+                    const hpPct = Math.max(0, (c.currentHp / c.hp) * 100);
+                    return `<div class="relative w-16 h-16 md:w-20 md:h-20 bg-[#0b0c10] border-2 border-purple-500 rounded-xl flex items-center justify-center p-1 ${c.currentHp <= 0 ? 'card-fainted border-gray-600' : ''}">
+                        <img src="${c.image}" class="w-full h-full object-contain drop-shadow">
+                        <div class="absolute -bottom-2 w-full px-1"><div class="h-2 bg-black border border-gray-700 rounded-full w-full overflow-hidden"><div class="h-full ${hpPct > 50 ? 'bg-green-500' : 'bg-red-500'}" style="width: ${hpPct}%"></div></div></div>
+                    </div>`;
+                }).join('');
+            }
+
+            const logUI = document.getElementById('raid-log-container');
+            if (r.log.length > logUI.children.length) {
+                logUI.innerHTML = r.log.map(msg => `<div class="text-[10px] md:text-xs text-purple-200 border-b border-[#262b3a] py-1 mb-1 last:border-0">${msg}</div>`).join('');
+                logUI.scrollTop = logUI.scrollHeight;
+            }
+
+            const btnAtk = document.getElementById('btn-raid-attack');
+            if (r.status === 'completed') {
+                btnAtk.disabled = true; btnAtk.innerHTML = 'Raid Finished';
+            } else if (myData) {
+                const hasAlive = myData.team.some(c => c && c.currentHp > 0);
+                if (!hasAlive) {
+                    btnAtk.disabled = true; btnAtk.innerHTML = '<i class="fa-solid fa-skull mr-2"></i> Team Fainted';
+                } else if (!state.raidAttackCooldown) {
+                    btnAtk.disabled = false; btnAtk.innerHTML = '<i class="fa-solid fa-bolt mr-2"></i> Strike Boss!';
+                }
+            }
+            
+            document.getElementById('modal-raid-arena').classList.add('active');
+        }
+
+        async function attackRaidBoss() {
+            if(!state.activeRaid || state.raidAttackCooldown) return;
+            const r = state.activeRaid;
+            const myData = r.players[state.userId];
+            const alivePokes = myData.team.filter(c => c && c.currentHp > 0);
+            if(alivePokes.length === 0) return;
+
+            // Attack logic
+            state.raidAttackCooldown = true;
+            document.getElementById('btn-raid-attack').disabled = true;
+            
+            // Calc damage
+            let totalDmg = 0;
+            alivePokes.forEach(p => { totalDmg += Math.max(10, Math.floor((p.atk * (1 + Math.random()*0.5)) - (r.boss.def * 0.2))); });
+            
+            // Boss counter attacks one random alive pokemon
+            const target = alivePokes[Math.floor(Math.random() * alivePokes.length)];
+            const bossDmg = Math.max(5, Math.floor((r.boss.atk * (0.8 + Math.random()*0.4)) - (target.def * 0.3)));
+            target.currentHp = Math.max(0, target.currentHp - bossDmg);
+            
+            let logMsg = `${state.profile.name} dealt ${totalDmg} dmg!`;
+            if (target.currentHp <= 0) logMsg += ` ${target.name} fainted!`;
+
+            const newHp = Math.max(0, r.boss.currentHp - totalDmg);
+            const newDamage = myData.damage + totalDmg;
+
+            const updates = {
+                [`boss.currentHp`]: newHp,
+                [`players.${state.userId}.damage`]: newDamage,
+                [`players.${state.userId}.team`]: myData.team
+            };
+
+            // Read-Modify-Write Log to prevent heavy overwrite, but for simplicity in local client, append and keep small.
+            const newLog = [...r.log, logMsg];
+            if(newLog.length > 20) newLog.shift();
+            updates.log = newLog;
+
+            if (newHp <= 0) updates.status = 'completed';
+
+            try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'raids', r.id), updates); } catch(e){}
+            
+            setTimeout(() => {
+                state.raidAttackCooldown = false;
+                renderRaidArena(); // Re-enable button if still alive
+            }, 2000); // 2 second cooldown
+        }
+
+        function showRaidResult() {
+            if(!state.activeRaid) return;
+            const r = state.activeRaid;
+            const myData = r.players[state.userId];
+            if(!myData) return;
+
+            // Sync HP back to collection
+            let hpUpdated = false;
+            myData.team.forEach(bc => {
+                if(bc) {
+                    const collectionCard = state.collection.find(c => c.id === bc.id);
+                    if (collectionCard) { collectionCard.currentHp = bc.currentHp; hpUpdated = true; }
+                }
+            });
+            if(hpUpdated) saveCloudData();
+
+            const overlay = document.getElementById('raid-result-overlay');
+            const title = document.getElementById('raid-result-title');
+            const dmgDealt = myData.damage;
+            
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            
+            if (r.boss.currentHp <= 0) {
+                if (!overlay.dataset.granted || overlay.dataset.granted !== r.id) {
+                    const coins = 500 + Math.floor(dmgDealt * 0.2);
+                    const revives = Math.floor(Math.random() * 3) + 1;
+                    const gotRip = Math.random() > 0.6;
+                    
+                    document.getElementById('raid-reward-coins').querySelector('span').textContent = coins;
+                    document.getElementById('raid-reward-revives').querySelector('span').textContent = revives;
+                    document.getElementById('raid-reward-revives').classList.remove('hidden');
+                    
+                    state.profile.coins += coins;
+                    state.profile.inventory.revive = (state.profile.inventory.revive || 0) + revives;
+                    
+                    if (gotRip) {
+                        document.getElementById('raid-reward-rips').querySelector('span').textContent = '1';
+                        document.getElementById('raid-reward-rips').classList.remove('hidden');
+                        state.profile.inventory.freeRips = (state.profile.inventory.freeRips || 0) + 1;
+                    }
+                    
+                    gainXP(500, "Raid Cleared");
+                    saveCloudData();
+                    overlay.dataset.granted = r.id;
+                }
+            } else {
+                title.textContent = "RAID FAILED";
+                title.className = "text-5xl font-black uppercase tracking-widest mb-2 text-red-500 drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]";
+                document.getElementById('raid-result-desc').textContent = "Time expired or boss fled.";
+            }
+
+            document.querySelector('.close-raid-result').onclick = async () => {
+                overlay.classList.add('hidden'); overlay.classList.remove('flex');
+                document.getElementById('modal-raid-arena').classList.remove('active');
+                
+                const dismissedBy = r.dismissedBy || [];
+                if (!dismissedBy.includes(state.userId)) {
+                    dismissedBy.push(state.userId);
+                    try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'raids', r.id), { dismissedBy }); } catch(e){}
+                }
+                
+                state.activeRaid = null;
                 renderCollection();
             };
         }
