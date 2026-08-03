@@ -376,7 +376,11 @@
         </div>
 
         <div id="screen-packs" class="screen">
-            <div class="text-center mb-10 mt-4 md:mt-8">
+            <div class="text-center mb-10 mt-4 md:mt-8 relative">
+                <!-- Mobile Refresh Button -->
+                <button id="btn-mobile-refresh" class="md:hidden absolute -top-2 right-0 bg-[#151821] text-gray-400 hover:text-white w-10 h-10 rounded-full border border-[#262b3a] transition-all flex items-center justify-center shadow-lg hover:border-blue-500 z-10">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
                 <h2 class="text-4xl font-black text-white mb-4 tracking-widest uppercase text-shadow-md">Card Shop</h2>
                 <div class="inline-flex items-center gap-3 bg-[#151821] px-6 py-3 rounded-full border-2 border-[#262b3a] shadow-lg">
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png" class="w-6 h-6">
@@ -1373,6 +1377,17 @@
                 };
                 document.getElementById('modal-save-data').classList.add('active');
             });
+
+            // Mobile Refresh Button
+            const mobileRefreshBtn = document.getElementById('btn-mobile-refresh');
+            if (mobileRefreshBtn) {
+                mobileRefreshBtn.addEventListener('click', () => {
+                    mobileRefreshBtn.querySelector('i').classList.add('fa-spin');
+                    setTimeout(() => mobileRefreshBtn.querySelector('i').classList.remove('fa-spin'), 1000);
+                    checkPackReset();
+                    showToast("Shop refreshed.", "info");
+                });
+            }
         }
 
         function updateProfileUI() {
