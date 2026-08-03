@@ -56,6 +56,8 @@
         .btn-secondary { background-color: rgba(255,255,255,0.05); color: var(--text); border: 2px solid var(--border); border-radius: 16px; font-weight: 700; padding: 14px; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(4px); }
         .btn-secondary:hover { background-color: var(--surface-hover); border-color: #4b5563; }
         .btn-secondary:active { transform: scale(0.96); }
+        .btn-google { background-color: white; color: #333; border: 1px solid #ccc; font-weight: 700; }
+        .btn-google:hover { background-color: #f1f5f9; box-shadow: 0 4px 15px rgba(255,255,255,0.2); transform: translateY(-2px); }
 
         header { 
             background-color: rgba(11, 12, 16, 0.85); backdrop-filter: blur(16px); 
@@ -171,7 +173,7 @@
             background-size: 200% 200%; animation: shimmer 3s infinite linear; pointer-events: none; z-index: 10; mix-blend-mode: color-dodge; 
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
         }
-        /* The custom PokeLocal holographic text requested */
+        
         .mythic-holo .card-img-container::before {
             content: 'POKELOCAL POKELOCAL POKELOCAL POKELOCAL POKELOCAL POKELOCAL POKELOCAL POKELOCAL POKELOCAL POKELOCAL POKELOCAL';
             position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
@@ -203,28 +205,10 @@
         .pack-item:active { transform: scale(0.96); }
         .pack-price { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 12px; color: #fbbf24; border: 1px solid #fbbf24; display: flex; align-items: center; gap: 4px; }
         
-        @keyframes pokeball-throw {
-            0% { transform: translateY(150px) scale(0) rotate(-180deg); opacity: 0; }
-            50% { transform: translateY(-50px) scale(1.5) rotate(20deg); opacity: 1; }
-            70% { transform: translateY(0) scale(1.2) rotate(-10deg); }
-            85% { transform: translateY(-20px) scale(1) rotate(5deg); }
-            100% { transform: translateY(0) scale(1) rotate(0); }
-        }
-        @keyframes pokeball-shake {
-            0%, 100% { transform: translateX(0) rotate(0); }
-            20% { transform: translateX(-15px) rotate(-15deg); }
-            40% { transform: translateX(15px) rotate(15deg); }
-            60% { transform: translateX(-10px) rotate(-10deg); }
-            80% { transform: translateX(10px) rotate(10deg); }
-        }
-        @keyframes pokeball-flash { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(3) drop-shadow(0 0 40px rgba(255,255,255,1)); } }
         @keyframes pack-appear { 0% { transform: scale(0); opacity: 0; filter: blur(10px); } 100% { transform: scale(1); opacity: 1; filter: blur(0); } }
         @keyframes rip-shake { 0%, 100% { transform: rotate(0deg) scale(1); } 25% { transform: rotate(-3deg) scale(1.02); } 75% { transform: rotate(3deg) scale(1.02); } }
         .anim-rip-top-new { transform: translateY(-30%) translateX(-20%) rotate(-35deg); opacity: 0; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
         
-        .anim-pokeball-throw { animation: pokeball-throw 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        .anim-pokeball-shake { animation: pokeball-shake 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite; }
-        .anim-pokeball-flash { animation: pokeball-flash 0.5s ease-out forwards; }
         .anim-pack-appear { animation: pack-appear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         .anim-rip-shake { animation: rip-shake 0.2s ease-in-out infinite; }
         
@@ -339,28 +323,52 @@
         <div id="screen-setup" class="screen">
             <div class="card-surface p-6 md:p-10 max-w-lg mx-auto mt-4 md:mt-12 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-blue-500 to-yellow-500"></div>
-                <div class="text-center mb-10">
-                    <div class="w-20 h-20 mx-auto bg-[#0b0c10] rounded-full flex items-center justify-center mb-6 border-2 border-[#262b3a] shadow-xl relative">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/exp-share.png" class="w-12 h-12 object-contain drop-shadow-md">
-                        <div class="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-[#151821]"></div>
-                    </div>
-                    <h2 class="text-3xl font-black text-white uppercase tracking-wider">Trainer ID</h2>
-                    <p class="text-sm text-gray-400 mt-3 font-medium px-4">Establish your local identity to sync trades and packs.</p>
-                </div>
-                <div id="profile-form" class="space-y-6">
-                    <div>
-                        <label class="block text-[11px] font-black text-blue-400 mb-3 tracking-widest uppercase">Unique Trainer Name</label>
-                        <input type="text" id="setup-username" class="input-field" placeholder="e.g. AshKetchum" maxlength="15">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-black text-blue-400 mb-3 tracking-widest uppercase">Choose Faction</label>
-                        <div class="flex space-x-4">
-                            <button class="team-btn" data-team="Valor"><i class="fa-solid fa-fire pointer-events-none"></i>Valor</button>
-                            <button class="team-btn" data-team="Mystic"><i class="fa-solid fa-snowflake pointer-events-none"></i>Mystic</button>
-                            <button class="team-btn" data-team="Instinct"><i class="fa-solid fa-bolt pointer-events-none"></i>Instinct</button>
+                
+                <div id="setup-step-login" class="">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 mx-auto bg-[#0b0c10] rounded-full flex items-center justify-center mb-6 border-2 border-[#262b3a] shadow-xl">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-blue-500 drop-shadow"></i>
                         </div>
+                        <h2 class="text-3xl font-black text-white uppercase tracking-wider">Save Data</h2>
+                        <p class="text-sm text-gray-400 mt-3 font-medium px-4">Sign in with Google to protect your cards and sync across devices.</p>
                     </div>
-                    <button id="btn-save-profile" class="btn-primary w-full mt-8 py-5 text-lg shadow-[0_10px_30px_rgba(37,99,235,0.4)]">Initialize Setup</button>
+                    <button id="btn-google-login" class="btn-primary btn-google w-full mb-4 py-4 text-lg"><i class="fa-brands fa-google text-[#ea4335]"></i> Continue with Google</button>
+                    <button id="btn-skip-login" class="w-full py-4 text-sm text-gray-500 font-bold uppercase tracking-widest hover:text-white transition">Play Locally (No Cloud Save)</button>
+                </div>
+
+                <div id="setup-step-profile" class="hidden">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 mx-auto bg-[#0b0c10] rounded-full flex items-center justify-center mb-6 border-2 border-[#262b3a] shadow-xl relative">
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/exp-share.png" class="w-12 h-12 object-contain drop-shadow-md">
+                            <div class="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-[#151821]"></div>
+                        </div>
+                        <h2 class="text-3xl font-black text-white uppercase tracking-wider">Trainer ID</h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-[11px] font-black text-blue-400 mb-3 tracking-widest uppercase">Unique Trainer Name</label>
+                            <input type="text" id="setup-username" class="input-field" placeholder="e.g. AshKetchum" maxlength="15">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-black text-blue-400 mb-3 tracking-widest uppercase">Choose Faction</label>
+                            <div class="flex space-x-4">
+                                <button class="team-btn" data-team="Valor"><i class="fa-solid fa-fire pointer-events-none"></i>Valor</button>
+                                <button class="team-btn" data-team="Mystic"><i class="fa-solid fa-snowflake pointer-events-none"></i>Mystic</button>
+                                <button class="team-btn" data-team="Instinct"><i class="fa-solid fa-bolt pointer-events-none"></i>Instinct</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-black text-blue-400 mb-3 tracking-widest uppercase">Select Buddy Pokemon</label>
+                            <div class="flex gap-3">
+                                <input type="text" id="setup-buddy-input" class="input-field flex-1" placeholder="Name or ID (e.g. pikachu)">
+                                <button id="btn-fetch-buddy" class="btn-secondary whitespace-nowrap border-blue-500 text-blue-400 px-6">Find</button>
+                            </div>
+                            <div id="setup-buddy-preview" class="mt-4 flex flex-col items-center justify-center min-h-[80px] bg-[#0b0c10] border border-dashed border-[#262b3a] rounded-xl py-4 transition-all">
+                                <span class="text-[10px] text-gray-600 font-bold uppercase tracking-widest">No Buddy Selected</span>
+                            </div>
+                        </div>
+                        <button id="btn-save-profile" class="btn-primary w-full mt-8 py-5 text-lg shadow-[0_10px_30px_rgba(37,99,235,0.4)]">Initialize Setup</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -400,81 +408,81 @@
             <!-- Item Shop -->
             <h3 class="text-center text-lg font-black text-green-500 mb-4 tracking-widest uppercase"><i class="fa-solid fa-briefcase mr-2"></i> Poke Mart</h3>
             <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto pb-10 px-4 mb-8 border-b border-[#262b3a]">
-                <div class="bg-[#151821] border-2 border-[#262b3a] rounded-2xl p-4 text-center cursor-pointer hover:border-green-500 transition btn-buy-item" data-item="berry" data-cost="10">
+                <div class="bg-[#151821] border-2 border-[#262b3a] rounded-2xl p-4 text-center cursor-pointer hover:border-green-500 transition btn-buy-item shadow-lg" data-item="berry" data-cost="10">
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/oran-berry.png" class="w-10 h-10 mx-auto mb-2 drop-shadow">
                     <h4 class="font-black text-[10px] text-white uppercase">Oran Berry</h4>
                     <p class="text-[9px] text-gray-400 mb-2">+20 HP</p>
-                    <div class="text-yellow-400 text-[10px] font-black bg-[#0b0c10] rounded py-1"><i class="fa-solid fa-coins mr-1"></i>10</div>
+                    <div class="text-yellow-400 text-[10px] font-black bg-[#0b0c10] rounded py-1 border border-[#262b3a]"><i class="fa-solid fa-coins mr-1"></i>10</div>
                 </div>
-                <div class="bg-[#151821] border-2 border-[#262b3a] rounded-2xl p-4 text-center cursor-pointer hover:border-green-500 transition btn-buy-item" data-item="potion" data-cost="50">
+                <div class="bg-[#151821] border-2 border-[#262b3a] rounded-2xl p-4 text-center cursor-pointer hover:border-green-500 transition btn-buy-item shadow-lg" data-item="potion" data-cost="50">
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/potion.png" class="w-10 h-10 mx-auto mb-2 drop-shadow">
                     <h4 class="font-black text-[10px] text-white uppercase">Potion</h4>
                     <p class="text-[9px] text-gray-400 mb-2">Max HP</p>
-                    <div class="text-yellow-400 text-[10px] font-black bg-[#0b0c10] rounded py-1"><i class="fa-solid fa-coins mr-1"></i>50</div>
+                    <div class="text-yellow-400 text-[10px] font-black bg-[#0b0c10] rounded py-1 border border-[#262b3a]"><i class="fa-solid fa-coins mr-1"></i>50</div>
                 </div>
-                <div class="bg-[#151821] border-2 border-[#262b3a] rounded-2xl p-4 text-center cursor-pointer hover:border-yellow-500 transition btn-buy-item" data-item="revive" data-cost="200">
+                <div class="bg-[#151821] border-2 border-[#262b3a] rounded-2xl p-4 text-center cursor-pointer hover:border-yellow-500 transition btn-buy-item shadow-lg" data-item="revive" data-cost="200">
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/revive.png" class="w-10 h-10 mx-auto mb-2 drop-shadow">
                     <h4 class="font-black text-[10px] text-white uppercase">Revive</h4>
                     <p class="text-[9px] text-gray-400 mb-2">Cure Faint</p>
-                    <div class="text-yellow-400 text-[10px] font-black bg-[#0b0c10] rounded py-1"><i class="fa-solid fa-coins mr-1"></i>200</div>
+                    <div class="text-yellow-400 text-[10px] font-black bg-[#0b0c10] rounded py-1 border border-[#262b3a]"><i class="fa-solid fa-coins mr-1"></i>200</div>
                 </div>
             </div>
 
-            <!-- Premium Packs Gen 1-9 -->
+            <!-- Premium Packs Gen 1-9 (Real Names) -->
             <h3 class="text-center text-lg font-black text-yellow-500 mb-6 tracking-widest uppercase"><i class="fa-solid fa-store mr-2"></i> Premium Packs</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto pb-12 px-4">
                 <div class="pack-item premium-pack" data-type="gen1" data-cost="100">
                     <div class="pack-price"><i class="fa-solid fa-coins"></i> 100</div>
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png" class="h-20 md:h-28 mx-auto object-contain drop-shadow-xl mb-4 pointer-events-none">
-                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Kanto Classic</h3>
+                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Base Set</h3>
                     <p class="text-[8px] md:text-[10px] text-gray-400 font-bold tracking-widest uppercase">Gen 1 • 3 Cards</p>
                 </div>
                 <div class="pack-item premium-pack" data-type="gen2" data-cost="100">
                     <div class="pack-price"><i class="fa-solid fa-coins"></i> 100</div>
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/249.png" class="h-20 md:h-28 mx-auto object-contain drop-shadow-xl mb-4 pointer-events-none">
-                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Johto Journeys</h3>
+                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Neo Genesis</h3>
                     <p class="text-[8px] md:text-[10px] text-gray-400 font-bold tracking-widest uppercase">Gen 2 • 3 Cards</p>
                 </div>
                 <div class="pack-item premium-pack" data-type="gen3" data-cost="100">
                     <div class="pack-price"><i class="fa-solid fa-coins"></i> 100</div>
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/384.png" class="h-20 md:h-28 mx-auto object-contain drop-shadow-xl mb-4 pointer-events-none">
-                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Hoenn Heroes</h3>
+                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">EX Ruby & Sapphire</h3>
                     <p class="text-[8px] md:text-[10px] text-gray-400 font-bold tracking-widest uppercase">Gen 3 • 3 Cards</p>
                 </div>
                 <div class="pack-item premium-pack" data-type="gen4" data-cost="100">
                     <div class="pack-price"><i class="fa-solid fa-coins"></i> 100</div>
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png" class="h-20 md:h-28 mx-auto object-contain drop-shadow-xl mb-4 pointer-events-none">
-                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Sinnoh Stars</h3>
+                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Diamond & Pearl</h3>
                     <p class="text-[8px] md:text-[10px] text-gray-400 font-bold tracking-widest uppercase">Gen 4 • 3 Cards</p>
                 </div>
                 <div class="pack-item premium-pack" data-type="gen5" data-cost="100">
                     <div class="pack-price"><i class="fa-solid fa-coins"></i> 100</div>
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/643.png" class="h-20 md:h-28 mx-auto object-contain drop-shadow-xl mb-4 pointer-events-none">
-                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Unova Unbound</h3>
+                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Black & White</h3>
                     <p class="text-[8px] md:text-[10px] text-gray-400 font-bold tracking-widest uppercase">Gen 5 • 3 Cards</p>
                 </div>
                 <div class="pack-item premium-pack" data-type="gen6" data-cost="100">
                     <div class="pack-price"><i class="fa-solid fa-coins"></i> 100</div>
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/658.png" class="h-20 md:h-28 mx-auto object-contain drop-shadow-xl mb-4 pointer-events-none">
-                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Kalos Kingdom</h3>
+                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">XY</h3>
                     <p class="text-[8px] md:text-[10px] text-gray-400 font-bold tracking-widest uppercase">Gen 6 • 3 Cards</p>
                 </div>
                 <div class="pack-item premium-pack" data-type="gen7" data-cost="100">
                     <div class="pack-price"><i class="fa-solid fa-coins"></i> 100</div>
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/724.png" class="h-20 md:h-28 mx-auto object-contain drop-shadow-xl mb-4 pointer-events-none">
-                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Alola Adventures</h3>
+                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Sun & Moon</h3>
                     <p class="text-[8px] md:text-[10px] text-gray-400 font-bold tracking-widest uppercase">Gen 7 • 3 Cards</p>
                 </div>
                 <div class="pack-item premium-pack" data-type="gen8" data-cost="100">
                     <div class="pack-price"><i class="fa-solid fa-coins"></i> 100</div>
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png" class="h-20 md:h-28 mx-auto object-contain drop-shadow-xl mb-4 pointer-events-none">
-                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Galar Glories</h3>
+                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Sword & Shield</h3>
                     <p class="text-[8px] md:text-[10px] text-gray-400 font-bold tracking-widest uppercase">Gen 8 • 3 Cards</p>
                 </div>
                 <div class="pack-item premium-pack" data-type="gen9" data-cost="100">
                     <div class="pack-price"><i class="fa-solid fa-coins"></i> 100</div>
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1017.png" class="h-20 md:h-28 mx-auto object-contain drop-shadow-xl mb-4 pointer-events-none">
-                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Paldea Pioneers</h3>
+                    <h3 class="font-black text-sm md:text-xl text-white tracking-widest uppercase mb-1">Scarlet & Violet</h3>
                     <p class="text-[8px] md:text-[10px] text-gray-400 font-bold tracking-widest uppercase">Gen 9 • 3 Cards</p>
                 </div>
             </div>
@@ -550,7 +558,7 @@
                 </div>
                 <div class="flex justify-between items-start mb-8 relative z-10">
                     <div class="flex items-center gap-6">
-                        <div class="w-20 h-20 bg-[#0b0c10] rounded-full border-4 border-[#262b3a] shadow-xl flex items-center justify-center relative overflow-hidden">
+                        <div class="w-20 h-20 bg-[#0b0c10] rounded-full border-4 border-[#262b3a] shadow-xl flex items-center justify-center relative overflow-hidden" id="info-avatar-container">
                             <i id="info-avatar-fallback" class="fa-solid fa-user-astronaut text-3xl text-gray-500"></i>
                             <img id="info-avatar-img" src="" class="w-16 h-16 object-contain hidden animate-bounce-slow">
                         </div>
@@ -604,7 +612,7 @@
                     </label>
                 </div>
                 <div class="font-black text-sm text-white uppercase tracking-widest mb-4">Export / Import Save</div>
-                <p class="text-xs text-red-400 mb-4 bg-red-900 bg-opacity-20 p-3 rounded-lg border border-red-500 border-opacity-30">Warning: Playing on local session. Export your save to avoid losing cards if you clear browser data.</p>
+                <p class="text-xs text-gray-400 mb-4 bg-[#0b0c10] p-3 rounded-lg border border-[#262b3a] shadow-inner">If you are using Google Login, your data is already secured in the cloud. You can still export codes manually.</p>
                 <div class="flex gap-2">
                     <button id="btn-export-save" class="flex-1 bg-[#151821] text-white px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest border border-[#262b3a] hover:bg-[#1f2330] transition-colors shadow-md"><i class="fa-solid fa-file-export mr-2 text-blue-400"></i>Export</button>
                     <button id="btn-import-save" class="flex-1 bg-[#151821] text-white px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest border border-[#262b3a] hover:bg-[#1f2330] transition-colors shadow-md"><i class="fa-solid fa-file-import mr-2 text-green-400"></i>Import</button>
@@ -613,13 +621,11 @@
         </div>
     </main>
 
-    <!-- Pack Rip Animation Modal -->
     <div id="modal-pack-rip" class="modal-overlay z-[200]">
         <div class="relative w-full h-full flex flex-col items-center justify-center">
             <img id="rip-pokeball" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="w-32 h-32 hidden absolute z-50 filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.8)]">
             <div class="relative w-64 h-96 cursor-pointer group flex flex-col items-center justify-center hidden perspective-1000" id="rip-pack-container">
                 <div class="absolute inset-0 z-10 w-full h-full shadow-[0_0_50px_rgba(37,99,235,0.4)]" id="rip-halves-wrapper">
-                    <!-- Improved tear animation: top rips up and away -->
                     <div class="absolute top-0 left-0 w-full h-[30%] bg-gradient-to-b from-blue-700 to-blue-600 rounded-t-3xl shadow-2xl border-4 border-b-0 border-blue-400 flex flex-col items-center justify-center overflow-hidden z-20 origin-bottom-left" id="rip-top-half">
                         <div class="w-full h-2 absolute bottom-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-50 jagged-edge"></div>
                     </div>
@@ -632,7 +638,6 @@
         </div>
     </div>
 
-    <!-- Post-Rip Pulls Modal -->
     <div id="modal-pulls" class="modal-overlay z-[150]">
         <div id="pulls-view" class="flex flex-col items-center pb-12 w-full">
             <div class="w-full max-w-md flex justify-between items-center mb-10 px-4">
@@ -648,23 +653,22 @@
         </div>
     </div>
 
-    <!-- Detail Modal -->
-    <div id="modal-card-detail" class="modal-overlay">
+    <div id="modal-card-detail" class="modal-overlay z-[140]">
         <div class="w-full max-w-sm flex flex-col items-center">
             <div id="detail-card-container" class="w-full max-w-[320px] mb-6 flex justify-center" style="perspective: 1500px;"></div>
             
             <div class="w-full bg-[#151821] p-4 rounded-3xl border-2 border-[#262b3a] shadow-2xl mb-4">
                 <h4 class="font-black text-[10px] text-gray-400 uppercase tracking-widest mb-2 text-center">Health Management</h4>
                 <div class="flex gap-2 justify-center">
-                    <button class="btn-use-item bg-[#0b0c10] border border-[#262b3a] rounded-xl p-2 flex-1 flex flex-col items-center justify-center hover:border-green-500 transition" data-type="berry">
+                    <button class="btn-use-item bg-[#0b0c10] border border-[#262b3a] rounded-xl p-2 flex-1 flex flex-col items-center justify-center hover:border-green-500 transition shadow-inner" data-type="berry">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/oran-berry.png" class="w-6 h-6 mb-1">
                         <span class="text-[8px] font-black text-white uppercase"><span id="inv-count-berry" class="text-blue-400">0</span> Berry</span>
                     </button>
-                    <button class="btn-use-item bg-[#0b0c10] border border-[#262b3a] rounded-xl p-2 flex-1 flex flex-col items-center justify-center hover:border-green-500 transition" data-type="potion">
+                    <button class="btn-use-item bg-[#0b0c10] border border-[#262b3a] rounded-xl p-2 flex-1 flex flex-col items-center justify-center hover:border-green-500 transition shadow-inner" data-type="potion">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/potion.png" class="w-6 h-6 mb-1">
                         <span class="text-[8px] font-black text-white uppercase"><span id="inv-count-potion" class="text-blue-400">0</span> Potion</span>
                     </button>
-                    <button class="btn-use-item bg-[#0b0c10] border border-[#262b3a] rounded-xl p-2 flex-1 flex flex-col items-center justify-center hover:border-yellow-500 transition" data-type="revive">
+                    <button class="btn-use-item bg-[#0b0c10] border border-[#262b3a] rounded-xl p-2 flex-1 flex flex-col items-center justify-center hover:border-yellow-500 transition shadow-inner" data-type="revive">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/revive.png" class="w-6 h-6 mb-1">
                         <span class="text-[8px] font-black text-white uppercase"><span id="inv-count-revive" class="text-blue-400">0</span> Revive</span>
                     </button>
@@ -680,7 +684,6 @@
         </div>
     </div>
 
-    <!-- Battle Arena (Turn Based) Modal -->
     <div id="modal-battle-arena" class="modal-overlay z-[250]">
         <div class="card-surface w-full max-w-4xl h-[95vh] md:h-[85vh] flex flex-col overflow-hidden bg-[#0b0c10] border-4 border-blue-500 relative">
             <div class="p-4 border-b-2 border-[#262b3a] flex justify-between items-center bg-[#151821]">
@@ -688,7 +691,7 @@
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/vs-seeker.png" class="w-8 h-8">
                     <h3 class="font-black text-white text-lg tracking-widest uppercase" id="arena-header-text">Battle Arena</h3>
                 </div>
-                <button class="btn-flee text-xs bg-red-900 bg-opacity-30 text-red-400 px-4 py-2 rounded-xl border border-red-500 border-opacity-50 font-black uppercase tracking-widest hover:bg-red-800 transition">Flee</button>
+                <button class="btn-flee text-xs bg-red-900 bg-opacity-30 text-red-400 px-4 py-2 rounded-xl border border-red-500 border-opacity-50 font-black uppercase tracking-widest hover:bg-red-800 transition shadow-inner">Flee</button>
             </div>
             
             <div class="flex-1 flex flex-col relative overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#1a1c23] via-[#0b0c10] to-black">
@@ -738,12 +741,10 @@
                 </div>
             </div>
 
-            <!-- Controls -->
             <div class="p-4 bg-[#151821] border-t-2 border-[#262b3a] flex gap-4" id="arena-controls">
                 <button id="btn-arena-attack" class="btn-primary flex-1 py-5 text-xl tracking-widest uppercase shadow-[0_0_20px_rgba(37,99,235,0.4)] disabled:opacity-50" disabled>Attack</button>
             </div>
             
-            <!-- Result Overlay -->
             <div id="arena-result-overlay" class="absolute inset-0 bg-black bg-opacity-95 backdrop-blur-md flex-col justify-center items-center z-50 hidden">
                 <h2 id="arena-result-title" class="text-5xl font-black uppercase tracking-widest mb-4">Victory</h2>
                 <div id="arena-reward" class="text-2xl font-black text-yellow-400 mb-8 hidden"><i class="fa-solid fa-coins mr-2"></i>+<span>0</span></div>
@@ -763,29 +764,21 @@
             </div>
             
             <div class="flex-1 flex flex-col md:flex-row trade-modal-content overflow-hidden bg-[#0b0c10]">
-                <!-- Trade Slots Area -->
                 <div class="flex-1 flex flex-col md:flex-row trade-modal-slots p-4 gap-4 md:gap-8 items-center justify-center overflow-y-auto md:overflow-visible relative">
-                    
-                    <!-- You Offer (Up to 3) -->
                     <div class="w-full flex flex-col items-center">
                         <span class="text-[10px] font-black text-blue-400 mb-2 md:mb-4 tracking-widest uppercase bg-blue-900 bg-opacity-20 px-4 py-1.5 rounded-full border border-blue-500 border-opacity-30 shadow-md">You Offer (Max 3)</span>
                         <div id="my-offer-slots" class="flex gap-2 justify-center w-full"></div>
                         <span id="my-trade-status" class="text-[10px] md:text-[11px] font-black mt-3 md:mt-5 px-3 py-2 md:px-4 md:py-2.5 rounded-xl bg-[#151821] text-gray-400 border-2 border-[#262b3a] w-full max-w-[200px] text-center tracking-widest uppercase shadow-inner">Selecting...</span>
                     </div>
-                    
                     <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-[#151821] flex items-center justify-center border-2 md:border-4 border-[#0b0c10] shadow-[0_0_20px_rgba(0,0,0,0.5)] z-10 my-2 md:my-0 flex-shrink-0">
                         <i class="fa-solid fa-arrow-right-arrow-left rotate-90 md:rotate-0 text-gray-400 text-sm md:text-lg"></i>
                     </div>
-                    
-                    <!-- They Offer (Up to 3) -->
                     <div class="w-full flex flex-col items-center">
                         <span class="text-[10px] font-black text-red-400 mb-2 md:mb-4 tracking-widest uppercase bg-red-900 bg-opacity-20 px-4 py-1.5 rounded-full border border-red-500 border-opacity-30 shadow-md">They Offer</span>
                         <div id="their-offer-slots" class="flex gap-2 justify-center w-full"></div>
                         <span id="their-trade-status" class="text-[10px] md:text-[11px] font-black mt-3 md:mt-5 px-3 py-2 md:px-4 md:py-2.5 rounded-xl bg-[#151821] text-gray-400 border-2 border-[#262b3a] w-full max-w-[200px] text-center tracking-widest uppercase shadow-inner">Selecting...</span>
                     </div>
                 </div>
-                
-                <!-- Chat -->
                 <div class="h-40 md:h-full trade-modal-chat border-t-2 border-[#262b3a] flex flex-col bg-[#151821]">
                     <div class="bg-[#0b0c10] px-5 py-3 border-b border-[#262b3a] flex items-center gap-3">
                         <i class="fa-solid fa-shield-halved text-green-500"></i>
@@ -833,12 +826,11 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         const POKEAPI_BASE = 'https://pokeapi.co/api/v2';
         const TOTAL_POKEMON = 1025;
-        const typeColors = { normal: '#A8A77A', fire: '#EE8130', water: '#6390F0', electric: '#F7D02C', grass: '#7AC74C', ice: '#96D9D6', fighting: '#C22E28', poison: '#A33EA1', ground: '#E2BF65', flying: '#A98FF3', psychic: '#F95587', bug: '#A6B91A', rock: '#B6A136', ghost: '#735797', dragon: '#6F35FC', dark: '#705848', steel: '#B7B7CE', fairy: '#D685AD' };
         
         const fallbackConfig = {
           apiKey: "AIzaSyCcr1eMPHy66OrGNqw0sxHycmKOjZplhQw",
@@ -857,6 +849,7 @@
             packs: { openedToday: 0, lastReset: 0, holoUnlocked: false, holoClaimedToday: false },
             onlineUsers: {},
             userId: null,
+            pendingBuddy: null,
             currentPulls: [], pullIndex: 0, activeTrade: null, activePackType: null, activeDetailCard: null,
             activeBattle: null,
             pogoRarities: {}
@@ -992,7 +985,6 @@
                     state.collection = data.collection || [];
                     state.packs = data.packs || { openedToday: 0, lastReset: 0, holoUnlocked: false, holoClaimedToday: false };
                     
-                    // Migration for existing collections to ensure HP exists
                     state.collection.forEach(c => { if(c.currentHp === undefined) c.currentHp = c.hp; });
 
                     document.getElementById('toggle-animations').checked = !state.profile.settings.skipAnimations;
@@ -1014,7 +1006,12 @@
                 }
             } catch(e) { showSetupScreen(); }
         }
-        function showSetupScreen() { switchScreen('screen-setup'); }
+
+        function showSetupScreen() { 
+            switchScreen('screen-setup'); 
+            document.getElementById('setup-step-login').classList.remove('hidden');
+            document.getElementById('setup-step-profile').classList.add('hidden');
+        }
 
         async function saveCloudData() {
             updateProfileUI();
@@ -1030,6 +1027,29 @@
         }
 
         function setupEventListeners() {
+            // Google Login
+            document.getElementById('btn-google-login').addEventListener('click', async () => {
+                try {
+                    const provider = new GoogleAuthProvider();
+                    const result = await signInWithPopup(auth, provider);
+                    state.userId = result.user.uid;
+                    await loadCloudData();
+                    if (!state.profile.name) {
+                        document.getElementById('setup-step-login').classList.add('hidden');
+                        document.getElementById('setup-step-profile').classList.remove('hidden');
+                    }
+                    showToast("Google Authentication successful.", "success");
+                } catch(e) {
+                    console.error(e);
+                    showToast("Google login failed/blocked by sandbox. Please click 'Play Locally'.", "error", 6000);
+                }
+            });
+
+            document.getElementById('btn-skip-login').addEventListener('click', () => {
+                document.getElementById('setup-step-login').classList.add('hidden');
+                document.getElementById('setup-step-profile').classList.remove('hidden');
+            });
+
             DOM.navItems.forEach(item => {
                 item.addEventListener('click', (e) => {
                     const target = e.currentTarget;
@@ -1047,12 +1067,39 @@
                 });
             });
 
+            // Buddy Fetch
+            document.getElementById('btn-fetch-buddy').addEventListener('click', async () => {
+                const val = document.getElementById('setup-buddy-input').value.toLowerCase().trim();
+                const btn = document.getElementById('btn-fetch-buddy');
+                if(!val) return;
+                try {
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+                    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${val}`);
+                    if(!res.ok) throw new Error();
+                    const data = await res.json();
+                    state.pendingBuddy = {
+                        id: data.id, name: data.name,
+                        sprite: data.sprites.front_default || data.sprites.other['official-artwork'].front_default
+                    };
+                    document.getElementById('setup-buddy-preview').innerHTML = `
+                        <img src="${state.pendingBuddy.sprite}" class="w-16 h-16 drop-shadow-md animate-bounce-slow">
+                        <span class="text-xs font-black uppercase text-white mt-2">${state.pendingBuddy.name}</span>
+                    `;
+                } catch(e) {
+                    showToast("Pokemon not found.", "error");
+                } finally {
+                    btn.textContent = 'Find';
+                }
+            });
+
             document.getElementById('btn-save-profile').addEventListener('click', async () => {
                 const username = document.getElementById('setup-username').value.trim();
                 if (!username || username.length < 3) { showToast("Valid trainer name required.", "error"); return; }
                 if (!selectedTeam) { showToast("Select a faction.", "error"); return; }
                 state.profile.name = username; state.profile.nameLower = username.toLowerCase();
                 state.profile.team = selectedTeam; state.profile.id = state.userId;
+                if(state.pendingBuddy) state.profile.buddy = state.pendingBuddy;
+                
                 await saveCloudData(); setupFirebaseListeners(); updatePresence();
                 DOM.navItems.forEach(n => n.classList.remove('active')); switchScreen('screen-packs');
                 document.querySelector('[data-target="screen-packs"]').classList.add('active');
@@ -1157,7 +1204,6 @@
             
             document.addEventListener('click', (e) => { if (e.target.closest('.flip-card')) e.target.closest('.flip-card').classList.toggle('is-flipped'); });
 
-            // Showcase toggle
             document.getElementById('btn-toggle-showcase').addEventListener('click', () => {
                 if(!state.activeDetailCard) return;
                 state.activeDetailCard.showcase = !state.activeDetailCard.showcase;
@@ -1167,7 +1213,6 @@
                 showToast(state.activeDetailCard.showcase ? "Added to Showcase!" : "Removed from Showcase", "success");
             });
 
-            // Export / Import
             document.getElementById('btn-export-save').addEventListener('click', () => {
                 document.getElementById('save-modal-title').textContent = 'Export Save';
                 document.getElementById('save-data-code').value = btoa(`pokelocal_save:${state.userId}`);
@@ -1214,6 +1259,12 @@
             document.getElementById('info-card-count').textContent = state.collection.length;
             document.getElementById('info-trade-count').textContent = state.profile.trades;
             document.getElementById('info-battle-count').textContent = state.profile.battles;
+
+            if (state.profile.buddy && state.profile.buddy.sprite) {
+                document.getElementById('info-avatar-fallback').classList.add('hidden');
+                document.getElementById('info-avatar-img').src = state.profile.buddy.sprite;
+                document.getElementById('info-avatar-img').classList.remove('hidden');
+            }
         }
 
         function updateDetailModalUI() {
@@ -1286,7 +1337,6 @@
                 
                 let pickedId = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
                 
-                // Soft enforcement of legendaries from correct gen
                 if (targetRarity === 'legendary') {
                     if (type === 'gen1' || type === 'daily') pickedId = [144, 145, 146, 150, 151][Math.floor(Math.random() * 5)];
                     else if (type === 'gen2') pickedId = [243, 244, 245, 249, 250, 251][Math.floor(Math.random() * 6)];
@@ -1306,7 +1356,7 @@
         function checkPackReset() {
             const now = getNow();
             const date = new Date(now);
-            const today = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()).getTime(); // UTC midnight reset
+            const today = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()).getTime();
             if (state.packs.lastReset < today) {
                 state.packs.openedToday = 0; state.packs.lastReset = today; state.packs.holoClaimedToday = false; saveCloudData();
             }
@@ -1717,7 +1767,6 @@
             activeSlotIndex = index;
             const grid = document.getElementById('trade-collection-grid'); grid.innerHTML = '';
             
-            // Only show cards not currently offered in other slots, and not fainted
             const offeredIds = state.activeTrade.localOffers.filter(o => o).map(o => o.id);
             const availableCards = state.collection.filter(c => !offeredIds.includes(c.id) && c.currentHp > 0);
 
@@ -1773,9 +1822,7 @@
         function finalizeTradeLocally(data) {
             const me = data[state.userId], them = data[state.activeTrade.partnerId];
             if (me && them) {
-                // Remove my offers
                 me.offers.forEach(o => { if(o) state.collection = state.collection.filter(c => c.id !== o.id); });
-                // Add their offers
                 let gained = 0;
                 them.offers.forEach(o => {
                     if(o) {
@@ -1826,11 +1873,9 @@
         }
 
         async function initiateBattle(targetUid, targetName) {
-            // Filter alive cards
             const aliveCards = state.collection.filter(c => c.currentHp > 0);
             if (aliveCards.length < 3) return showToast("You need 3 conscious Pokemon to battle. Use Revives/Potions.", "error");
             
-            // Auto select best 3 cards
             const bestCards = aliveCards.sort((a,b) => b.bst - a.bst).slice(0, 3);
             const teamPayload = bestCards.map(c => ({ id: c.id, name: c.name, bst: c.bst, image: c.image, hp: c.hp, currentHp: c.currentHp, atk: c.atk, def: c.def, spd: c.spd }));
 
@@ -1871,7 +1916,6 @@
             
             document.getElementById('arena-opp-name').textContent = isP1 ? b.receiverName : b.initiatorName;
             
-            // Render Pokemon
             if (myActive) {
                 document.getElementById('arena-my-img').src = myActive.image;
                 document.getElementById('arena-my-poke-name').textContent = myActive.name;
@@ -1893,11 +1937,9 @@
                 else document.getElementById('arena-opp-img').classList.remove('card-fainted');
             }
 
-            // Render Party Dots
             document.getElementById('arena-my-party').innerHTML = myTeam.map((c, i) => `<div class="w-3 h-3 rounded-full border ${c.currentHp > 0 ? 'bg-blue-500 border-blue-400' : 'bg-gray-700 border-gray-600'} ${i === myActiveIdx ? 'ring-2 ring-white' : ''}"></div>`).join('');
             document.getElementById('arena-opp-party').innerHTML = theirTeam.map((c, i) => `<div class="w-3 h-3 rounded-full border ${c.currentHp > 0 ? 'bg-red-500 border-red-400' : 'bg-gray-700 border-gray-600'} ${i === theirActiveIdx ? 'ring-2 ring-white' : ''}"></div>`).join('');
 
-            // Controls & Log
             const lastLog = b.log[b.log.length - 1];
             if (lastLog) document.getElementById('arena-main-log').textContent = lastLog.msg;
 
@@ -1937,7 +1979,6 @@
 
             document.getElementById('btn-arena-attack').disabled = true;
 
-            // Attack animation logic client side
             const myImg = document.getElementById('arena-my-img');
             myImg.classList.add('translate-y-[-20px]', 'scale-110');
             setTimeout(() => myImg.classList.remove('translate-y-[-20px]', 'scale-110'), 200);
@@ -1952,7 +1993,6 @@
 
             if (defender.currentHp <= 0) {
                 newLog.push({ msg: `${defender.name} fainted!`, timestamp: Date.now()+1 });
-                // Check if they have next pokemon
                 let nextIdx = -1;
                 for(let i=0; i<3; i++) { if (theirTeam[i].currentHp > 0) { nextIdx = i; break; } }
                 if (nextIdx !== -1) {
@@ -1995,7 +2035,6 @@
             const isP1 = data.initiator === state.userId;
             const myFinalTeam = isP1 ? data.initiatorTeam : data.receiverTeam;
 
-            // Apply persistent HP changes to my collection
             let hpUpdated = false;
             myFinalTeam.forEach(bc => {
                 const collectionCard = state.collection.find(c => c.id === bc.id);
