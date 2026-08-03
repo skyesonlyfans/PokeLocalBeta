@@ -1383,9 +1383,8 @@
             if (mobileRefreshBtn) {
                 mobileRefreshBtn.addEventListener('click', () => {
                     mobileRefreshBtn.querySelector('i').classList.add('fa-spin');
-                    setTimeout(() => mobileRefreshBtn.querySelector('i').classList.remove('fa-spin'), 1000);
-                    checkPackReset();
-                    showToast("Shop refreshed.", "info");
+                    showToast("Refreshing page...", "info");
+                    setTimeout(() => window.location.reload(), 400);
                 });
             }
         }
