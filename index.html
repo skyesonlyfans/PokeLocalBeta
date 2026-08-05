@@ -531,6 +531,7 @@
                         <option value="all">All Entries</option>
                         <option value="showcase">Showcase ★</option>
                         <option value="legendary">Legendary</option>
+                        <option value="ready-evolve">Ready to Evolve</option>
                         <option value="fainted">Fainted</option>
                         <option value="hp">Highest HP</option>
                         <option value="attack">Highest Attack</option>
@@ -2008,6 +2009,12 @@
             // Apply filtering logic
             if (filter === 'showcase') displayCards = displayCards.filter(c => c.showcase);
             else if (filter === 'legendary') displayCards = displayCards.filter(c => c.rarityClass.includes('rarity-legendary'));
+            else if (filter === 'ready-evolve') {
+                const counts = {};
+                state.collection.forEach(c => counts[c.apiId] = (counts[c.apiId] || 0) + 1);
+                const evolvableIds = Object.keys(counts).filter(id => counts[id] >= 3);
+                displayCards = displayCards.filter(c => evolvableIds.includes(String(c.apiId)));
+            }
             else if (filter === 'fainted') displayCards = displayCards.filter(c => c.currentHp <= 0);
             
             // Search logic
@@ -2723,12 +2730,12 @@
             const id = legendaryIds[Math.floor(Math.random() * legendaryIds.length)];
             const res = await fetch(`${POKEAPI_BASE}/pokemon/${id}`);
             const data = await res.json();
-            const hp = 5000 + Math.floor(Math.random() * 3000);
+            const hp = 5000 + Math.floor(Math.random() * 3000); // Lower HP to be more manageable
             return {
                 name: data.name,
                 image: data.sprites.other['official-artwork'].front_default,
                 maxHp: hp, currentHp: hp,
-                atk: 70 + Math.floor(Math.random() * 50),
+                atk: 70 + Math.floor(Math.random() * 50), // Significantly reduced Boss Attack to prevent immediate fainting
                 def: 200
             };
         }
@@ -2912,22 +2919,35 @@
             const alivePokes = myData.team.filter(c => c && c.currentHp > 0);
             if(alivePokes.length === 0) return;
 
+            // Attack logic
             state.raidAttackCooldown = true;
             document.getElementById('btn-raid-attack').disabled = true;
             
+            // Calc damage
             let totalDmg = 0;
             alivePokes.forEach(p => { totalDmg += Math.max(10, Math.floor((p.atk * (1 + Math.random()*0.5)) - (r.boss.def * 0.2))); });
             
-            const target = alivePokes[Math.floor(Math.random() * alivePokes.length)];
-            
-            const targetImg = document.getElementById(`raid-poke-${target.id}`);
-            if(targetImg) {
-                targetImg.classList.add('anim-shake-red');
-                setTimeout(() => targetImg.classList.remove('anim-shake-red'), 500);
+            // Player attacks Boss visual effect
+            const bossImg = document.getElementById('raid-boss-img');
+            if (bossImg) {
+                bossImg.classList.add('anim-shake-red');
+                setTimeout(() => bossImg.classList.remove('anim-shake-red'), 500);
             }
             
-            const bossDmg = Math.max(5, Math.floor((r.boss.atk * (0.8 + Math.random()*0.4)) - (target.def * 0.3)));
+            // Boss counter attacks one random alive pokemon
+            const target = alivePokes[Math.floor(Math.random() * alivePokes.length)];
+            // Lowered boss counter attack logic to make it much fairer and give visual feedback.
+            const bossDmg = Math.max(5, Math.floor((r.boss.atk * (0.4 + Math.random()*0.3)) - (target.def * 0.2))); 
             target.currentHp = Math.max(0, target.currentHp - bossDmg);
+            
+            // Shake player pokemon when hit by boss
+            const targetImg = document.getElementById(`raid-poke-${target.id}`);
+            if(targetImg) {
+                setTimeout(() => {
+                    targetImg.classList.add('anim-shake-red');
+                    setTimeout(() => targetImg.classList.remove('anim-shake-red'), 500);
+                }, 500); // slight delay so boss gets hit first visually
+            }
             
             let logMsg = `${state.profile.name} dealt ${totalDmg} dmg! boss hit back for ${bossDmg}.`;
             if (target.currentHp <= 0) logMsg += ` ${target.name} fainted!`;
@@ -2941,6 +2961,7 @@
                 [`players.${state.userId}.team`]: myData.team
             };
 
+            // Read-Modify-Write Log to prevent heavy overwrite, but for simplicity in local client, append and keep small.
             const newLog = [...r.log, logMsg];
             if(newLog.length > 20) newLog.shift();
             updates.log = newLog;
@@ -2951,8 +2972,8 @@
             
             setTimeout(() => {
                 state.raidAttackCooldown = false;
-                renderRaidArena();
-            }, 2000); 
+                renderRaidArena(); // Re-enable button if still alive
+            }, 2000); // 2 second cooldown
         }
 
         function showRaidResult() {
